@@ -1,101 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="850" viewBox="0 0 1280 850">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930">
   <defs>
     <style>
-      text { font-family: 'Segoe UI', Arial, sans-serif; fill: #263238; }
-      .title { font-size: 20px; font-weight: 700; } .section-title { font-size: 18px; font-weight: 700; }
-      .label { font-size: 15px; } .small { font-size: 13px; fill: #596b75; }
-      .field { fill: #fff; stroke: #adbcc5; stroke-width: 1.3; rx: 5; }
-      .section { fill: #f7f9fa; stroke: #cbd6dc; stroke-width: 1.2; rx: 9; }
-      .button { fill: #eff2f4; stroke: #aeb9bf; stroke-width: 1.2; rx: 3; }
-      .disabled { fill: #e5e9eb; stroke: #b7c0c5; stroke-width: 1.3; rx: 5; }
-      .light { fill: #fff; }
+      text{font-family:'Segoe UI',Arial,sans-serif;fill:#263238}.title{font-size:20px;font-weight:700}.section-title{font-size:18px;font-weight:700}.label{font-size:15px}.small{font-size:13px;fill:#596b75}.field{fill:#fff;stroke:#adbcc5;stroke-width:1.3;rx:5}.disabled{fill:#e5e9eb;stroke:#b7c0c5;stroke-width:1.3;rx:5}.section{fill:#f7f9fa;stroke:#cbd6dc;stroke-width:1.2;rx:9}.button{fill:#eff2f4;stroke:#aeb9bf;stroke-width:1.2;rx:4}.light{fill:#fff}
     </style>
-    <g id="location-controls">
-      <rect x="0" y="0" width="41" height="34" class="button"/>
-      <path d="M11 12 V8 H16 M25 8 H30 V12 M11 22 V26 H16 M25 26 H30 V22" fill="none" stroke="#e24242" stroke-width="2.3"/>
-      <circle cx="20.5" cy="17" r="4.7" fill="none" stroke="#1680d1" stroke-width="2"/>
-      <rect x="47" y="0" width="41" height="34" class="button"/>
-      <path d="M58 12 V8 H63 M72 8 H77 V12 M58 22 V26 H63 M72 26 H77 V22" fill="none" stroke="#1680d1" stroke-width="2.3"/>
-      <circle cx="67.5" cy="17" r="4.5" fill="none" stroke="#1680d1" stroke-width="2"/>
+    <g id="camera-controls">
+      <rect width="41" height="34" class="button"/><path d="M11 12V8H16 M25 8H30V12 M11 22V26H16 M25 26H30V22" fill="none" stroke="#e24242" stroke-width="2.3"/><circle cx="20.5" cy="17" r="4.7" fill="none" stroke="#1680d1" stroke-width="2"/>
+      <rect x="47" width="41" height="34" class="button"/><path d="M58 12V8H63 M72 8H77V12 M58 22V26H63 M72 26H77V22" fill="none" stroke="#1680d1" stroke-width="2.3"/><circle cx="67.5" cy="17" r="4.5" fill="none" stroke="#1680d1" stroke-width="2"/>
+    </g>
+    <g id="mark-actions">
+      <rect width="86" height="34" class="button"/><text x="12" y="22" class="small">Save new</text>
+      <rect x="92" width="76" height="34" class="button"/><text x="105" y="22" class="small">Update</text>
+      <rect x="174" width="75" height="34" class="button"/><text x="189" y="22" class="small">Delete</text>
     </g>
   </defs>
-  <rect width="1280" height="850" fill="#e9eef1"/>
-  <rect width="1280" height="49" fill="#34454f"/>
+  <rect width="1600" height="930" fill="#e9eef1"/><rect width="1600" height="49" fill="#34454f"/>
   <text x="24" y="32" class="light" font-size="17" font-weight="700">OpenPnP 2.7 — Feeders</text>
-  <rect x="0" y="49" width="213" height="801" fill="#f4f7f8" stroke="#cbd6dc"/>
-  <text x="20" y="85" class="section-title">Feeders</text>
-  <rect x="12" y="105" width="189" height="39" rx="5" fill="#dcebf3"/>
-  <text x="22" y="130" class="label">F01  Fiducial Auto Feeder</text>
-  <text x="22" y="177" class="label">F02  ReferenceAutoFeeder</text>
-  <text x="22" y="211" class="label">F03  ReferenceStripFeeder</text>
-  <rect x="228" y="65" width="1035" height="767" rx="10" fill="#fff" stroke="#cbd5da"/>
+  <rect y="49" width="213" height="881" fill="#f4f7f8" stroke="#cbd6dc"/>
+  <text x="20" y="85" class="section-title">Feeders</text><rect x="12" y="105" width="189" height="39" rx="5" fill="#dcebf3"/>
+  <text x="22" y="130" class="label">F01  Fiducial Auto Feeder</text><text x="22" y="177" class="label">F02  Fiducial Auto Feeder</text><text x="22" y="211" class="label">F03  ReferenceAutoFeeder</text>
+  <rect x="228" y="65" width="1350" height="845" rx="10" fill="#fff" stroke="#cbd5da"/>
   <text x="248" y="99" class="title">F01 — ReferenceFiducialAutoFeeder</text>
-  <text x="248" y="122" class="small">Standard auto feeder settings with machine fiducials and optional top-camera part recognition</text>
+  <text x="248" y="122" class="small">Multiple feeders on the same installation surface share its three saved fiducial references.</text>
 
-  <rect x="245" y="141" width="999" height="244" class="section"/>
-  <text x="265" y="172" class="section-title">Machine fiducials</text>
-  <text x="265" y="204" class="small">Mark</text>
-  <text x="460" y="204" class="small">X</text>
-  <text x="596" y="204" class="small">Y</text>
-  <text x="735" y="204" class="small">Camera controls</text>
-  <text x="877" y="204" class="small">Machine origin</text>
-  <text x="266" y="244" class="label">fid_A  Front left</text>
-  <text x="266" y="294" class="label">fid_B  Front right</text>
-  <text x="266" y="344" class="label">fid_C  Rear right</text>
-  <g>
-    <rect x="448" y="219" width="116" height="34" class="field"/><text x="458" y="241" class="label">-250.000</text>
-    <rect x="584" y="219" width="116" height="34" class="field"/><text x="594" y="241" class="label">-200.000</text>
-    <use href="#location-controls" x="730" y="219"/>
-  </g>
-  <g>
-    <rect x="448" y="269" width="116" height="34" class="field"/><text x="458" y="291" class="label">0.000</text>
-    <rect x="584" y="269" width="116" height="34" class="field"/><text x="594" y="291" class="label">-200.000</text>
-    <use href="#location-controls" x="730" y="269"/>
-  </g>
-  <g>
-    <rect x="448" y="319" width="116" height="34" class="disabled"/><text x="458" y="341" class="small">0.000</text>
-    <rect x="584" y="319" width="116" height="34" class="disabled"/><text x="594" y="341" class="small">0.000</text>
-    <use href="#location-controls" x="730" y="319" opacity="0.38"/>
-  </g>
-  <rect x="878" y="327" width="18" height="18" fill="#fff" stroke="#93a6b2"/>
-  <path d="M881 336 L886 341 L894 330" fill="none" stroke="#2378b9" stroke-width="2.6"/>
-  <text x="906" y="342" class="label">Use machine origin (X=0, Y=0)</text>
-  <text x="878" y="371" class="small">Uncheck to enter fid_C coordinates</text>
+  <rect x="245" y="141" width="1315" height="88" class="section"/><text x="265" y="170" class="section-title">Installation surface</text>
+  <text x="266" y="203" class="label">Surface</text><rect x="409" y="178" width="266" height="35" class="field"/><text x="422" y="201" class="label">Front deck</text><path d="M652 193h11l-6 7z" fill="#49616f"/>
+  <rect x="702" y="178" width="122" height="35" class="button"/><text x="714" y="201" class="small">New surface</text>
+  <rect x="834" y="178" width="93" height="35" class="button"/><text x="854" y="201" class="small">Rename</text>
+  <rect x="937" y="178" width="123" height="35" class="button"/><text x="950" y="201" class="small">Delete surface</text>
+  <text x="1090" y="201" class="small">F02 can select this surface or another one.</text>
 
-  <rect x="245" y="402" width="486" height="410" class="section"/>
-  <text x="265" y="434" class="section-title">Three-point calibration</text>
-  <text x="266" y="477" class="label">Fiducial Part</text>
-  <rect x="458" y="452" width="246" height="35" class="field"/>
-  <text x="470" y="475" class="label">FIDUCIAL-HOME</text><path d="M682 467 L692 467 L687 473 Z" fill="#49616f"/>
-  <text x="266" y="527" class="label">Maximum mark shift</text>
-  <rect x="458" y="502" width="118" height="35" class="field"/><text x="470" y="525" class="label">3.0 mm</text>
-  <text x="266" y="577" class="label">Maximum scale / shear</text>
-  <rect x="458" y="552" width="118" height="35" class="field"/><text x="470" y="575" class="label">1.0 %</text>
-  <rect x="267" y="613" width="18" height="18" fill="#fff" stroke="#93a6b2"/>
-  <text x="296" y="628" class="label">Enable periodic calibration</text>
-  <text x="266" y="679" class="label">Interval</text>
-  <rect x="458" y="654" width="118" height="35" class="field"/><text x="470" y="677" class="label">5 min</text>
-  <rect x="266" y="719" width="140" height="39" rx="5" fill="#2677a4"/>
-  <text x="286" y="745" class="label light">Calibrate now</text>
-  <text x="424" y="744" class="small">Last calibration 11:42:08</text>
+  <rect x="245" y="246" width="1315" height="275" class="section"/><text x="265" y="278" class="section-title">Shared machine fiducials</text>
+  <text x="266" y="312" class="small">Mark</text><text x="416" y="312" class="small">Saved fiducial</text><text x="670" y="312" class="small">X</text><text x="783" y="312" class="small">Y</text><text x="892" y="312" class="small">Camera controls</text><text x="1000" y="312" class="small">Manage selected fiducial</text><text x="1285" y="312" class="small">Machine origin</text>
+  <text x="266" y="353" class="label">fid_A  Front left</text><rect x="409" y="327" width="242" height="36" class="field"/><text x="422" y="351" class="label">Fid_-250.000_-200.000</text><path d="M630 342h11l-6 7z" fill="#49616f"/>
+  <rect x="663" y="327" width="103" height="36" class="field"/><text x="672" y="350" class="label">-250.000</text><rect x="776" y="327" width="103" height="36" class="field"/><text x="785" y="350" class="label">-200.000</text><use href="#camera-controls" x="890" y="328"/><use href="#mark-actions" x="998" y="328"/>
+  <text x="266" y="407" class="label">fid_B  Front right</text><rect x="409" y="381" width="242" height="36" class="field"/><text x="422" y="405" class="label">Fid_0.000_-200.000</text><path d="M630 396h11l-6 7z" fill="#49616f"/>
+  <rect x="663" y="381" width="103" height="36" class="field"/><text x="672" y="404" class="label">0.000</text><rect x="776" y="381" width="103" height="36" class="field"/><text x="785" y="404" class="label">-200.000</text><use href="#camera-controls" x="890" y="382"/><use href="#mark-actions" x="998" y="382"/>
+  <text x="266" y="461" class="label">fid_C  Rear right</text><rect x="409" y="435" width="242" height="36" class="disabled"/><text x="422" y="459" class="small">Fid_0.000_0.000</text>
+  <rect x="663" y="435" width="103" height="36" class="disabled"/><text x="672" y="458" class="small">0.000</text><rect x="776" y="435" width="103" height="36" class="disabled"/><text x="785" y="458" class="small">0.000</text><use href="#camera-controls" x="890" y="436" opacity="0.38"/><use href="#mark-actions" x="998" y="436" opacity="0.38"/>
+  <rect x="1284" y="444" width="18" height="18" fill="#fff" stroke="#93a6b2"/><path d="M1287 453l5 5 8-11" fill="none" stroke="#2378b9" stroke-width="2.6"/><text x="1312" y="460" class="label">Use machine origin</text>
+  <text x="266" y="500" class="small">Capture with the camera, then Save new or Update. A changed name keeps the same internal reference.</text>
 
-  <rect x="747" y="402" width="497" height="410" class="section"/>
-  <text x="768" y="434" class="section-title">Top-camera part recognition</text>
-  <rect x="769" y="460" width="18" height="18" fill="#fff" stroke="#93a6b2"/>
-  <path d="M772 468 L777 474 L785 463" fill="none" stroke="#2378b9" stroke-width="2.6"/>
-  <text x="798" y="475" class="label">Recognize the fed part</text>
-  <text x="768" y="529" class="label">Recognition mode</text>
-  <rect x="982" y="504" width="238" height="36" class="field"/>
-  <text x="995" y="528" class="label">First feed in job</text>
-  <path d="M1198 519 L1208 519 L1203 525 Z" fill="#49616f"/>
-  <text x="768" y="578" class="label">Maximum part shift</text>
-  <rect x="982" y="553" width="121" height="35" class="field"/><text x="995" y="576" class="label">1.0 mm</text>
-  <rect x="768" y="616" width="159" height="39" rx="5" fill="#fff" stroke="#84a0b0"/>
-  <text x="788" y="642" class="label">Locate part now</text>
-  <rect x="768" y="676" width="173" height="39" rx="5" fill="#fff" stroke="#84a0b0"/>
-  <text x="786" y="702" class="label">Edit part pipeline</text>
-  <rect x="957" y="676" width="170" height="39" rx="5" fill="#fff" stroke="#84a0b0"/>
-  <text x="975" y="702" class="label">Reset part pipeline</text>
-  <text x="768" y="747" class="small">Modes: Every feed · First feed in job · Manual only</text>
-  <text x="768" y="774" class="small">The detected XY refines the corrected nominal pick location.</text>
+  <rect x="245" y="539" width="642" height="351" class="section"/><text x="265" y="571" class="section-title">Three-point calibration</text>
+  <text x="266" y="612" class="label">Fiducial Part</text><rect x="508" y="588" width="345" height="35" class="field"/><text x="520" y="611" class="label">FIDUCIAL-HOME</text><path d="M830 603h11l-6 7z" fill="#49616f"/>
+  <text x="266" y="663" class="label">Maximum mark shift</text><rect x="508" y="639" width="118" height="35" class="field"/><text x="520" y="662" class="label">3.0 mm</text>
+  <text x="266" y="713" class="label">Maximum scale / shear</text><rect x="508" y="689" width="118" height="35" class="field"/><text x="520" y="712" class="label">1.0 %</text>
+  <rect x="267" y="746" width="18" height="18" fill="#fff" stroke="#93a6b2"/><text x="296" y="761" class="label">Enable periodic calibration</text>
+  <text x="266" y="810" class="label">Interval</text><rect x="508" y="785" width="118" height="35" class="field"/><text x="520" y="808" class="label">5 min</text>
+  <rect x="666" y="785" width="142" height="39" rx="5" fill="#2677a4"/><text x="686" y="811" class="label light">Calibrate now</text><text x="266" y="859" class="small">Shared references; calibration runs for each feeder.</text>
+
+  <rect x="905" y="539" width="655" height="351" class="section"/><text x="925" y="571" class="section-title">Top-camera part recognition</text>
+  <rect x="926" y="597" width="18" height="18" fill="#fff" stroke="#93a6b2"/><path d="M929 605l5 6 8-11" fill="none" stroke="#2378b9" stroke-width="2.6"/><text x="956" y="612" class="label">Recognize the fed part</text>
+  <text x="925" y="665" class="label">Recognition mode</text><rect x="1164" y="640" width="357" height="36" class="field"/><text x="1177" y="664" class="label">First feed in job</text><path d="M1498 655h11l-6 7z" fill="#49616f"/>
+  <text x="925" y="715" class="label">Maximum part shift</text><rect x="1164" y="690" width="121" height="35" class="field"/><text x="1177" y="713" class="label">1.0 mm</text>
+  <rect x="925" y="748" width="159" height="39" rx="5" fill="#fff" stroke="#84a0b0"/><text x="945" y="774" class="label">Locate part now</text>
+  <rect x="1100" y="748" width="173" height="39" rx="5" fill="#fff" stroke="#84a0b0"/><text x="1118" y="774" class="label">Edit part pipeline</text>
+  <rect x="1289" y="748" width="170" height="39" rx="5" fill="#fff" stroke="#84a0b0"/><text x="1307" y="774" class="label">Reset part pipeline</text>
+  <text x="925" y="823" class="small">Modes: Every feed · First feed in job · Manual only</text><text x="925" y="850" class="small">The detected XY refines the corrected nominal pick location.</text>
 </svg>

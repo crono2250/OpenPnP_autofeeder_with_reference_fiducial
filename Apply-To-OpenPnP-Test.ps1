@@ -15,6 +15,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Could not apply the registration patch.' }
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\ThreePointAffine.java') `
         -Destination 'src\main\java\org\openpnp\machine\reference\feeder\ThreePointAffine.java'
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\FiducialCatalog.java') `
+        -Destination 'src\main\java\org\openpnp\machine\reference\feeder\FiducialCatalog.java'
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\ReferenceFiducialAutoFeeder.java') `
         -Destination 'src\main\java\org\openpnp\machine\reference\feeder\ReferenceFiducialAutoFeeder.java'
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\wizards\ReferenceFiducialAutoFeederConfigurationWizard.java') `

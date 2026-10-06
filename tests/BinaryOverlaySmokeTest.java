@@ -22,14 +22,24 @@ public class BinaryOverlaySmokeTest {
                 org.openpnp.model.LengthUnit.Millimeters, 12, 34, 7, 15));
         instance.setFidCUseMachineOrigin(true);
         assertXY(instance.getEffectiveFidCLocation(), 0, 0);
+        org.openpnp.machine.reference.feeder.FiducialCatalog catalog =
+                org.openpnp.machine.reference.feeder.FiducialCatalog.get();
         java.awt.Component wizard = (java.awt.Component) instance.getConfigurationWizard();
         ((org.openpnp.gui.support.AbstractConfigurationWizard) wizard).createBindings();
+        org.openpnp.machine.reference.feeder.FiducialCatalog.Surface surface =
+                instance.getOrCreateSurface();
+        if (surface == null || !surface.isCUseMachineOrigin()) {
+            throw new AssertionError("Legacy fiducials were not migrated to a shared surface.");
+        }
         // One belongs to the base feeder pick location; three are added for the fiducials.
         if (count(wizard, org.openpnp.gui.components.LocationButtonsPanel.class) != 4) {
             throw new AssertionError("The three fiducial location controls are missing.");
         }
         if (countPartsCombos(wizard) < 2 || countModeCombos(wizard) != 1) {
             throw new AssertionError("The fiducial Part and recognition mode dropdowns are missing.");
+        }
+        if (countSurfaceCombos(wizard) != 1 || countMarkCombos(wizard) != 3) {
+            throw new AssertionError("The surface and saved fiducial dropdowns are missing.");
         }
         javax.swing.JCheckBox origin = findOriginCheckBox(wizard);
         if (origin == null || !origin.isSelected()
@@ -41,9 +51,92 @@ public class BinaryOverlaySmokeTest {
         if (countDisabledLocationControls(wizard) != 0 || countVisibleOriginFields(wizard) != 0) {
             throw new AssertionError("Custom fid_C controls did not become enabled.");
         }
-        instance.setFidCUseMachineOrigin(false);
         assertXY(instance.getEffectiveFidCLocation(), 12, 34);
+        org.openpnp.machine.reference.feeder.FiducialCatalog.Mark mark = catalog.addMark(
+                new org.openpnp.model.Location(org.openpnp.model.LengthUnit.Millimeters,
+                        51.25, -7.5, 0, 0));
+        catalog.setMark(surface, 0, mark.getId());
+        if (!"Fid_51.250_-7.500".equals(mark.getName())) {
+            throw new AssertionError("Saved fiducial name does not use the XY format.");
+        }
+        catalog.updateMark(mark.getId(), new org.openpnp.model.Location(
+                org.openpnp.model.LengthUnit.Millimeters, 52, -8, 0, 0));
+        if (!"Fid_52.000_-8.000".equals(mark.getName())
+                || !mark.getId().equals(surface.getMarkId(0))) {
+            throw new AssertionError("Coordinate edits broke the stable fiducial reference.");
+        }
+        catalog.removeMark(mark.getId());
+        if (surface.getMarkId(0) != null) {
+            throw new AssertionError("Deleting a fiducial did not clear surface references.");
+        }
+        org.openpnp.machine.reference.feeder.ReferenceFiducialAutoFeeder another =
+                new org.openpnp.machine.reference.feeder.ReferenceFiducialAutoFeeder();
+        if (!surface.getId().equals(another.getOrCreateSurface().getId())) {
+            throw new AssertionError("A second feeder did not reuse the shared surface.");
+        }
+        org.openpnp.machine.reference.feeder.FiducialCatalog.Surface second =
+                catalog.addSurface("Other face");
+        another.setFiducialSurfaceId(second.getId());
+        if (!second.getId().equals(another.getOrCreateSurface().getId())) {
+            throw new AssertionError("The feeder could not select another installation surface.");
+        }
+        java.io.StringWriter xml = new java.io.StringWriter();
+        org.simpleframework.xml.Serializer serializer = new org.simpleframework.xml.core.Persister();
+        serializer.write(catalog, xml);
+        org.openpnp.machine.reference.feeder.FiducialCatalog restored = serializer.read(
+                org.openpnp.machine.reference.feeder.FiducialCatalog.class, xml.toString());
+        if (restored.getSurfaces().size() != 2 || restored.getMarks().isEmpty()) {
+            throw new AssertionError("The shared catalog did not survive XML serialization.");
+        }
+        java.io.StringWriter machineXml = new java.io.StringWriter();
+        serializer.write(referenceMachine, machineXml);
+        if (!machineXml.toString().contains("ReferenceFiducialAutoFeeder.fiducialCatalog")
+                || !machineXml.toString().contains("Other face")) {
+            throw new AssertionError("The shared catalog was not saved in machine.xml.");
+        }
+        org.openpnp.machine.reference.ReferenceMachine restoredMachine = serializer.read(
+                org.openpnp.machine.reference.ReferenceMachine.class, machineXml.toString());
+        Object savedCatalog = restoredMachine.getProperty(
+                "ReferenceFiducialAutoFeeder.fiducialCatalog");
+        if (!(savedCatalog instanceof org.openpnp.machine.reference.feeder.FiducialCatalog)
+                || ((org.openpnp.machine.reference.feeder.FiducialCatalog) savedCatalog)
+                        .getSurfaces().size() != 2) {
+            throw new AssertionError("The shared catalog did not reload from machine.xml.");
+        }
+        catalog.removeSurface(second.getId());
+        if (another.getOrCreateSurface() != null) {
+            throw new AssertionError("A deleted surface was silently replaced for its feeder.");
+        }
         System.out.println("BinaryOverlaySmokeTest passed");
+    }
+
+    private static int countSurfaceCombos(java.awt.Component root) {
+        return countCatalogCombos(root, true);
+    }
+
+    private static int countMarkCombos(java.awt.Component root) {
+        return countCatalogCombos(root, false);
+    }
+
+    private static int countCatalogCombos(java.awt.Component root, boolean surface) {
+        int total = 0;
+        if (root instanceof javax.swing.JComboBox) {
+            javax.swing.JComboBox<?> combo = (javax.swing.JComboBox<?>) root;
+            for (int i = 0; i < combo.getItemCount(); i++) {
+                Object item = combo.getItemAt(i);
+                if (surface && item instanceof org.openpnp.machine.reference.feeder.FiducialCatalog.Surface
+                        || !surface && item instanceof org.openpnp.machine.reference.feeder.FiducialCatalog.Mark) {
+                    total = 1;
+                    break;
+                }
+            }
+        }
+        if (root instanceof java.awt.Container) {
+            for (java.awt.Component child : ((java.awt.Container) root).getComponents()) {
+                total += countCatalogCombos(child, surface);
+            }
+        }
+        return total;
     }
 
     private static void assertXY(org.openpnp.model.Location location, double x, double y) {

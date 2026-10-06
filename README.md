@@ -1,16 +1,16 @@
 # Three-fiducial auto feeder for OpenPnP
 
-`ReferenceFiducialAutoFeeder` extends OpenPnP's `ReferenceAutoFeeder`. It measures three fixed machine fiducials with the top camera: `fid_A` at the front left, `fid_B` at the front right, and `fid_C` at the rear right, optionally assigned to the machine origin. An affine transform derived from those measurements corrects the feeder's nominal XY pick position. Optional part recognition uses the same camera to refine the XY position of a presented part.
+`ReferenceFiducialAutoFeeder` extends OpenPnP's `ReferenceAutoFeeder`. A machine-wide catalog stores reusable fiducial coordinates. Each installation surface assigns three saved marks to `fid_A`, `fid_B`, and `fid_C`; every feeder assigned to that surface uses the same three references. An affine transform derived from top-camera measurements corrects each feeder's nominal XY pick position. Optional part recognition uses the same camera to refine the XY position of a presented part.
 
 ![Configuration UI preview](gui-preview.png)
 
-The preview illustrates the custom feeder panel. Its fiducial fields contain only X/Y and use OpenPnP's standard camera move/capture location buttons. Checking **Use machine origin (X=0, Y=0)** fixes `fid_C` at the machine coordinate origin and disables its fields and buttons. Uncheck it to capture or enter a custom `fid_C` position. The values shown are examples, not machine settings. All labels added by this feeder are in English.
+The preview illustrates the custom feeder panel. Choose an installation surface, then choose its saved fiducials from the three dropdowns. The X/Y fields use OpenPnP's standard camera move/capture location buttons. **Save new** stores a captured position, **Update** changes the selected shared mark, and **Delete** removes it from every surface that references it. Checking **Use machine origin (X=0, Y=0)** fixes `fid_C` at the machine coordinate origin and disables its selection and camera controls. The values shown are examples, not machine settings. All labels added by this feeder are in English.
 
 ## Files
 
 | Path | Purpose |
 | --- | --- |
-| `overlay/src/main/java/...` | Feeder, three-point transform, and configuration wizard source |
+| `overlay/src/main/java/...` | Feeder, shared fiducial catalog, three-point transform, and configuration wizard source |
 | `register-feeder.patch` | Registers the new type in `ReferenceMachine` |
 | `openpnp-fiducial-auto-feeder-50dcdce.jar` | Overlay classes for OpenPnP 2.7 build `50dcdce` |
 | `Start-CustomOpenPnP.ps1` | Starts that binary with the overlay JAR first on the classpath |
@@ -32,9 +32,13 @@ Part vision is initially disabled. The supplied pipeline is OpenPnP's `Reference
 
 ## Calibration behavior
 
-Each fiducial has a nominal X/Y position entered with OpenPnP's location controls. The configured fiducial Part is selected from a dropdown backed by OpenPnP's Parts list. The fiducial locator uses the top camera's Default Z for detection; fiducial Z and rotation are neither entered nor used. Checking **Use machine origin** sets the effective `fid_C` position to X=0, Y=0. A custom `fid_C` position is retained when the checkbox is toggled and used when unchecked. The origin option refers to OpenPnP's machine coordinate origin, so leave it unchecked when the physical mark is elsewhere. Only XY is transformed for the pick location.
+The shared catalog is saved as a machine property in `machine.xml`. A mark's visible and saved name has the form `Fid_<X>_<Y>` in millimeters with three decimals, for example `Fid_-250.000_-200.000`. It changes automatically when **Update** changes its coordinates. A stable internal ID keeps every surface reference intact across a rename; two marks with the same rounded XY name are not allowed. New feeders join the first existing surface. Older feeders with individually saved fiducial locations are migrated to shared marks and matching surface assignments when their wizard is opened or calibration runs.
 
-Calibration is queued after homing and performed again for each feeder used at job start. If periodic calibration is enabled, it runs when its interval has elapsed and the machine is idle, or before the next feed. A failed or out-of-limit measurement invalidates the previous transform and prevents that feeder from preparing or feeding until calibration succeeds. Multiple feeders are calibrated independently.
+Each surface has a name and three dropdown assignments. Feeders on the same surface share all three assignments, including `fid_A` and `fid_B`. Create another surface to use a different A/B/C set. Updating a saved mark affects every surface and feeder that references it and invalidates their calibration. Deleting a mark clears those assignments, so select a replacement before running a job. Deleting a surface leaves its feeders unassigned until another surface is selected. Surface and catalog edits take effect in memory immediately; save the OpenPnP machine configuration to retain them after restart.
+
+The configured fiducial Part is selected from a dropdown backed by OpenPnP's Parts list. The fiducial locator uses the top camera's Default Z for detection; fiducial Z and rotation are neither entered nor used. **Use machine origin** is stored per surface and sets the effective `fid_C` position to X=0, Y=0. Its custom saved mark remains assigned while the option is checked. The origin option refers to OpenPnP's machine coordinate origin, so leave it unchecked when the physical mark is elsewhere. Only XY is transformed for the pick location.
+
+Calibration is queued after homing and performed again for each feeder used at job start. If periodic calibration is enabled, it runs when its interval has elapsed and the machine is idle, or before the next feed. A failed or out-of-limit measurement invalidates the previous transform and prevents that feeder from preparing or feeding until calibration succeeds. Multiple feeders currently measure the shared marks independently.
 
 ## Supported builds and installation
 
@@ -54,7 +58,7 @@ Follow [the installation guide](docs/installation-guide-ja.md) for machine backu
 
 - `ThreePointAffineTest` passes, including the three-point mapping and rejection of collinear marks.
 - The added feeder, wizard, and registered `ReferenceMachine` compile against the installed OpenPnP 2.7 JAR and libraries with `javac --release 11`.
-- `BinaryOverlaySmokeTest` confirms that the overlay classes take precedence and that OpenPnP lists the new feeder type.
+- `BinaryOverlaySmokeTest` confirms that the overlay classes take precedence, OpenPnP lists the new feeder type, shared marks and surfaces serialize, and GUI selection/origin controls are present.
 - Camera recognition accuracy and machine motion have not been tested on hardware.
 
 The added source is GPL-3.0-or-later, matching OpenPnP's license.
