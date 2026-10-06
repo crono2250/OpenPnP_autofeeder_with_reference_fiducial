@@ -9,6 +9,12 @@ public class BinaryOverlaySmokeTest {
                 !feederJar.equals(machineJar)) {
             throw new AssertionError("The overlay JAR did not take precedence: " + machineJar);
         }
+        org.openpnp.model.Configuration.initialize();
+        org.openpnp.machine.reference.ReferenceMachine referenceMachine =
+                new org.openpnp.machine.reference.ReferenceMachine();
+        if (!referenceMachine.getCompatibleFeederClasses().contains(feeder)) {
+            throw new AssertionError("The custom feeder is not registered in ReferenceMachine.");
+        }
         System.out.println("BinaryOverlaySmokeTest passed");
     }
 }
