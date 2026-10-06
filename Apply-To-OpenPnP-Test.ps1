@@ -9,9 +9,9 @@ if (-not (Test-Path -LiteralPath (Join-Path $checkout 'pom.xml'))) {
 }
 Push-Location $checkout
 try {
-    git apply --check (Join-Path $PSScriptRoot 'register-feeder.patch')
+    git apply --ignore-space-change --check (Join-Path $PSScriptRoot 'register-feeder.patch')
     if ($LASTEXITCODE -ne 0) { throw 'The registration patch does not apply to this checkout.' }
-    git apply (Join-Path $PSScriptRoot 'register-feeder.patch')
+    git apply --ignore-space-change (Join-Path $PSScriptRoot 'register-feeder.patch')
     if ($LASTEXITCODE -ne 0) { throw 'Could not apply the registration patch.' }
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\ThreePointAffine.java') `
         -Destination 'src\main\java\org\openpnp\machine\reference\feeder\ThreePointAffine.java'
