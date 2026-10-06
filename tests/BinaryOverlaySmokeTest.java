@@ -24,31 +24,46 @@ public class BinaryOverlaySmokeTest {
         assertXY(instance.getEffectiveFidCLocation(), 0, 0);
         org.openpnp.machine.reference.feeder.FiducialCatalog catalog =
                 org.openpnp.machine.reference.feeder.FiducialCatalog.get();
-        java.awt.Component wizard = (java.awt.Component) instance.getConfigurationWizard();
-        ((org.openpnp.gui.support.AbstractConfigurationWizard) wizard).createBindings();
+        org.openpnp.spi.PropertySheetHolder.PropertySheet[] sheets = instance.getPropertySheets();
+        if (sheets.length != 2 || !"Configuration".equals(sheets[0].getPropertySheetTitle())
+                || !"Calibration".equals(sheets[1].getPropertySheetTitle())) {
+            throw new AssertionError("Configuration and Calibration must be separate feeder tabs.");
+        }
+        java.awt.Component configuration = sheets[0].getPropertySheetPanel();
+        java.awt.Component calibration = sheets[1].getPropertySheetPanel();
+        if (!(configuration instanceof org.openpnp.machine.reference.feeder.wizards.ReferenceAutoFeederConfigurationWizard)
+                || count(configuration, org.openpnp.gui.components.LocationButtonsPanel.class) != 1
+                || countPartsCombos(configuration) != 1
+                || countActuatorCombos(configuration) != 2
+                || count(configuration, javax.swing.JCheckBox.class) != 2) {
+            throw new AssertionError("The standard ReferenceAutoFeeder controls are incomplete.");
+        }
+        if (!(calibration instanceof org.openpnp.machine.reference.feeder.wizards.ReferenceFiducialAutoFeederCalibrationWizard)) {
+            throw new AssertionError("The Calibration tab has the wrong wizard.");
+        }
         org.openpnp.machine.reference.feeder.FiducialCatalog.Surface surface =
                 instance.getOrCreateSurface();
         if (surface == null || !surface.isCUseMachineOrigin()) {
             throw new AssertionError("Legacy fiducials were not migrated to a shared surface.");
         }
-        // One belongs to the base feeder pick location; three are added for the fiducials.
-        if (count(wizard, org.openpnp.gui.components.LocationButtonsPanel.class) != 4) {
+        if (count(calibration, org.openpnp.gui.components.LocationButtonsPanel.class) != 3) {
             throw new AssertionError("The three fiducial location controls are missing.");
         }
-        if (countPartsCombos(wizard) < 2 || countModeCombos(wizard) != 1) {
+        if (countPartsCombos(calibration) != 1 || countModeCombos(calibration) != 1) {
             throw new AssertionError("The fiducial Part and recognition mode dropdowns are missing.");
         }
-        if (countSurfaceCombos(wizard) != 1 || countMarkCombos(wizard) != 3) {
+        if (countSurfaceCombos(calibration) != 1 || countMarkCombos(calibration) != 3) {
             throw new AssertionError("The surface and saved fiducial dropdowns are missing.");
         }
-        javax.swing.JCheckBox origin = findOriginCheckBox(wizard);
+        javax.swing.JCheckBox origin = findOriginCheckBox(calibration);
         if (origin == null || !origin.isSelected()
-                || countDisabledLocationControls(wizard) != 1
-                || countVisibleOriginFields(wizard) != 2) {
+                || countDisabledLocationControls(calibration) != 1
+                || countVisibleOriginFields(calibration) != 2) {
             throw new AssertionError("The machine-origin option did not disable fid_C X/Y and controls.");
         }
         origin.setSelected(false);
-        if (countDisabledLocationControls(wizard) != 0 || countVisibleOriginFields(wizard) != 0) {
+        if (countDisabledLocationControls(calibration) != 0
+                || countVisibleOriginFields(calibration) != 0) {
             throw new AssertionError("Custom fid_C controls did not become enabled.");
         }
         assertXY(instance.getEffectiveFidCLocation(), 12, 34);
@@ -198,6 +213,18 @@ public class BinaryOverlaySmokeTest {
         if (root instanceof java.awt.Container) {
             for (java.awt.Component child : ((java.awt.Container) root).getComponents()) {
                 total += countPartsCombos(child);
+            }
+        }
+        return total;
+    }
+
+    private static int countActuatorCombos(java.awt.Component root) {
+        int total = root instanceof javax.swing.JComboBox
+                && ((javax.swing.JComboBox<?>) root).getModel()
+                        instanceof org.openpnp.gui.support.ActuatorsComboBoxModel ? 1 : 0;
+        if (root instanceof java.awt.Container) {
+            for (java.awt.Component child : ((java.awt.Container) root).getComponents()) {
+                total += countActuatorCombos(child);
             }
         }
         return total;

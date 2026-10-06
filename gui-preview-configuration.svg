@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930">
+  <defs>
+    <style>
+      text{font-family:'Segoe UI',Arial,sans-serif;fill:#263238}.title{font-size:20px;font-weight:700}.section-title{font-size:18px;font-weight:700}.label{font-size:16px}.small{font-size:13px;fill:#596b75}.field{fill:#fff;stroke:#adbcc5;stroke-width:1.3;rx:5}.section{fill:#f7f9fa;stroke:#cbd6dc;stroke-width:1.2;rx:9}.button{fill:#eff2f4;stroke:#aeb9bf;stroke-width:1.2;rx:4}.light{fill:#fff}
+    </style>
+    <g id="location-controls">
+      <rect width="46" height="36" class="button"/><path d="M12 12V8H17 M29 8H34V12 M12 24V28H17 M29 28H34V24" fill="none" stroke="#e24242" stroke-width="2.3"/><circle cx="23" cy="18" r="5" fill="none" stroke="#1680d1" stroke-width="2"/>
+      <rect x="52" width="46" height="36" class="button"/><circle cx="75" cy="19" r="6" fill="none" stroke="#1680d1" stroke-width="2"/><path d="M69 8h12" stroke="#df4444" stroke-width="3"/>
+      <rect x="104" width="46" height="36" class="button"/><path d="M116 12V8H121 M133 8H138V12 M116 24V28H121 M133 28H138V24" fill="none" stroke="#1680d1" stroke-width="2.3"/><circle cx="127" cy="18" r="5" fill="none" stroke="#1680d1" stroke-width="2"/>
+      <rect x="156" width="46" height="36" class="button"/><path d="M170 10h18l-8 9v8" fill="none" stroke="#1680d1" stroke-width="2"/>
+    </g>
+  </defs>
+  <rect width="1600" height="930" fill="#e9eef1"/><rect width="1600" height="49" fill="#34454f"/>
+  <text x="24" y="32" class="light" font-size="17" font-weight="700">OpenPnP 2.7 — Feeders</text>
+  <rect y="49" width="213" height="881" fill="#f4f7f8" stroke="#cbd6dc"/>
+  <text x="20" y="85" class="section-title">Feeders</text><rect x="12" y="105" width="189" height="39" rx="5" fill="#dcebf3"/>
+  <text x="22" y="130" class="label">F01  Fiducial Auto Feeder</text><text x="22" y="177" class="label">F02  Fiducial Auto Feeder</text><text x="22" y="211" class="label">F03  ReferenceAutoFeeder</text>
+  <rect x="228" y="65" width="1350" height="845" rx="10" fill="#fff" stroke="#cbd5da"/>
+  <text x="248" y="99" class="title">F01 — ReferenceFiducialAutoFeeder</text>
+  <text x="248" y="122" class="small">The Configuration tab uses OpenPnP's original ReferenceAutoFeeder wizard.</text>
+  <rect x="245" y="141" width="148" height="39" rx="5" fill="#fff" stroke="#7b9fb5" stroke-width="2"/>
+  <text x="261" y="167" class="label">Configuration</text>
+  <rect x="399" y="141" width="129" height="39" rx="5" fill="#e6eef2" stroke="#aab9c2"/>
+  <text x="417" y="167" class="label">Calibration</text>
+
+  <rect x="245" y="195" width="1315" height="187" class="section"/><text x="265" y="226" class="section-title">General Settings</text>
+  <text x="267" y="268" class="label">Part</text><rect x="430" y="242" width="465" height="37" class="field"/><text x="446" y="267" class="label">SR2-1.60X0.80A-10K</text><path d="M868 258h13l-6.5 8z" fill="#49616f"/>
+  <text x="267" y="314" class="label">Feed Retry Count</text><rect x="430" y="288" width="465" height="37" class="field"/><text x="446" y="313" class="label">3</text>
+  <text x="267" y="360" class="label">Pick Retry Count</text><rect x="430" y="334" width="465" height="37" class="field"/><text x="446" y="359" class="label">0</text>
+
+  <rect x="245" y="398" width="1315" height="157" class="section"/><text x="265" y="429" class="section-title">Pick Location</text>
+  <text x="267" y="466" class="small">X</text><text x="516" y="466" class="small">Y</text><text x="765" y="466" class="small">Z</text><text x="1014" y="466" class="small">Rotation</text>
+  <rect x="265" y="477" width="230" height="37" class="field"/><text x="280" y="502" class="label">472.908</text>
+  <rect x="514" y="477" width="230" height="37" class="field"/><text x="529" y="502" class="label">117.880</text>
+  <rect x="763" y="477" width="230" height="37" class="field"/><text x="778" y="502" class="label">-29.500</text>
+  <rect x="1012" y="477" width="230" height="37" class="field"/><text x="1027" y="502" class="label">0.000</text>
+  <use href="#location-controls" x="1265" y="478"/>
+
+  <rect x="245" y="571" width="1315" height="289" class="section"/><text x="265" y="602" class="section-title">Actuators</text>
+  <text x="430" y="634" class="small">Actuator</text><text x="1255" y="634" class="small">Actuator Value</text>
+  <text x="267" y="679" class="label">Feed</text><rect x="430" y="650" width="803" height="38" class="field"/><text x="447" y="675" class="label">CL-Feeder_PrePick</text><path d="M1203 666h14l-7 8z" fill="#49616f"/>
+  <rect x="1253" y="650" width="118" height="38" class="field"/><text x="1268" y="675" class="label">3.000</text><rect x="1385" y="650" width="151" height="38" class="button"/><text x="1422" y="675" class="label">Test feed</text>
+  <text x="267" y="733" class="label">Post Pick</text><rect x="430" y="704" width="803" height="38" class="field"/><text x="447" y="729" class="label">CL-Feeder_PostPick</text><path d="M1203 720h14l-7 8z" fill="#49616f"/>
+  <rect x="1253" y="704" width="118" height="38" class="field"/><text x="1268" y="729" class="label">3.000</text><rect x="1385" y="704" width="151" height="38" class="button"/><text x="1407" y="729" class="label">Test post pick</text>
+  <rect x="268" y="769" width="18" height="18" fill="#fff" stroke="#93a6b2"/><text x="300" y="785" class="label">Move before feed</text>
+  <rect x="268" y="814" width="18" height="18" fill="#fff" stroke="#93a6b2"/><text x="300" y="830" class="label">Recycle supported</text>
+  <text x="1253" y="888" class="small">Example values only</text>
+</svg>

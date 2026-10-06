@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1010" viewBox="0 0 1600 1010">
   <defs>
     <style>
       text{font-family:'Segoe UI',Arial,sans-serif;fill:#263238}.title{font-size:20px;font-weight:700}.section-title{font-size:18px;font-weight:700}.label{font-size:15px}.small{font-size:13px;fill:#596b75}.field{fill:#fff;stroke:#adbcc5;stroke-width:1.3;rx:5}.disabled{fill:#e5e9eb;stroke:#b7c0c5;stroke-width:1.3;rx:5}.section{fill:#f7f9fa;stroke:#cbd6dc;stroke-width:1.2;rx:9}.button{fill:#eff2f4;stroke:#aeb9bf;stroke-width:1.2;rx:4}.light{fill:#fff}
@@ -13,14 +13,20 @@
       <rect x="174" width="75" height="34" class="button"/><text x="189" y="22" class="small">Delete</text>
     </g>
   </defs>
-  <rect width="1600" height="930" fill="#e9eef1"/><rect width="1600" height="49" fill="#34454f"/>
+  <rect width="1600" height="1010" fill="#e9eef1"/><rect width="1600" height="49" fill="#34454f"/>
   <text x="24" y="32" class="light" font-size="17" font-weight="700">OpenPnP 2.7 — Feeders</text>
-  <rect y="49" width="213" height="881" fill="#f4f7f8" stroke="#cbd6dc"/>
+  <rect y="49" width="213" height="961" fill="#f4f7f8" stroke="#cbd6dc"/>
   <text x="20" y="85" class="section-title">Feeders</text><rect x="12" y="105" width="189" height="39" rx="5" fill="#dcebf3"/>
   <text x="22" y="130" class="label">F01  Fiducial Auto Feeder</text><text x="22" y="177" class="label">F02  Fiducial Auto Feeder</text><text x="22" y="211" class="label">F03  ReferenceAutoFeeder</text>
-  <rect x="228" y="65" width="1350" height="845" rx="10" fill="#fff" stroke="#cbd5da"/>
+  <rect x="228" y="65" width="1350" height="925" rx="10" fill="#fff" stroke="#cbd5da"/>
   <text x="248" y="99" class="title">F01 — ReferenceFiducialAutoFeeder</text>
   <text x="248" y="122" class="small">Multiple feeders on the same installation surface share its three saved fiducial references.</text>
+
+  <rect x="245" y="141" width="148" height="39" rx="5" fill="#e6eef2" stroke="#aab9c2"/>
+  <text x="261" y="167" class="label">Configuration</text>
+  <rect x="399" y="141" width="129" height="39" rx="5" fill="#fff" stroke="#7b9fb5" stroke-width="2"/>
+  <text x="417" y="167" class="label">Calibration</text>
+  <g transform="translate(0,55)">
 
   <rect x="245" y="141" width="1315" height="88" class="section"/><text x="265" y="170" class="section-title">Installation surface</text>
   <text x="266" y="203" class="label">Surface</text><rect x="409" y="178" width="266" height="35" class="field"/><text x="422" y="201" class="label">Front deck</text><path d="M652 193h11l-6 7z" fill="#49616f"/>
@@ -56,4 +62,5 @@
   <rect x="1100" y="748" width="173" height="39" rx="5" fill="#fff" stroke="#84a0b0"/><text x="1118" y="774" class="label">Edit part pipeline</text>
   <rect x="1289" y="748" width="170" height="39" rx="5" fill="#fff" stroke="#84a0b0"/><text x="1307" y="774" class="label">Reset part pipeline</text>
   <text x="925" y="823" class="small">Modes: Every feed · First feed in job · Manual only</text><text x="925" y="850" class="small">The detected XY refines the corrected nominal pick location.</text>
+  </g>
 </svg>

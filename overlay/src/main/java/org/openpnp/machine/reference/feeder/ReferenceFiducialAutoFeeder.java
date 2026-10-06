@@ -13,8 +13,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.opencv.core.RotatedRect;
 import org.openpnp.ConfigurationListener;
+import org.openpnp.gui.support.PropertySheetWizardAdapter;
 import org.openpnp.gui.support.Wizard;
-import org.openpnp.machine.reference.feeder.wizards.ReferenceFiducialAutoFeederConfigurationWizard;
+import org.openpnp.machine.reference.feeder.wizards.ReferenceAutoFeederConfigurationWizard;
+import org.openpnp.machine.reference.feeder.wizards.ReferenceFiducialAutoFeederCalibrationWizard;
 import org.openpnp.model.Configuration;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
@@ -23,6 +25,7 @@ import org.openpnp.spi.Camera;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.MachineListener;
 import org.openpnp.spi.Nozzle;
+import org.openpnp.spi.PropertySheetHolder.PropertySheet;
 import org.openpnp.util.MovableUtils;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.vision.pipeline.CvPipeline;
@@ -325,7 +328,15 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
 
     @Override
     public Wizard getConfigurationWizard() {
-        return new ReferenceFiducialAutoFeederConfigurationWizard(this);
+        return new ReferenceAutoFeederConfigurationWizard(this);
+    }
+
+    @Override
+    public PropertySheet[] getPropertySheets() {
+        return new PropertySheet[] {
+                new PropertySheetWizardAdapter(getConfigurationWizard(), "Configuration"),
+                new PropertySheetWizardAdapter(new ReferenceFiducialAutoFeederCalibrationWizard(this),
+                        "Calibration")};
     }
 
     public Location getFidALocation() { return fidALocation; }

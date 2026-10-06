@@ -19,8 +19,8 @@ try {
         -Destination 'src\main\java\org\openpnp\machine\reference\feeder\FiducialCatalog.java'
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\ReferenceFiducialAutoFeeder.java') `
         -Destination 'src\main\java\org\openpnp\machine\reference\feeder\ReferenceFiducialAutoFeeder.java'
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\wizards\ReferenceFiducialAutoFeederConfigurationWizard.java') `
-        -Destination 'src\main\java\org\openpnp\machine\reference\feeder\wizards\ReferenceFiducialAutoFeederConfigurationWizard.java'
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'overlay\src\main\java\org\openpnp\machine\reference\feeder\wizards\ReferenceFiducialAutoFeederCalibrationWizard.java') `
+        -Destination 'src\main\java\org\openpnp\machine\reference\feeder\wizards\ReferenceFiducialAutoFeederCalibrationWizard.java'
     Write-Host 'Applied the feeder source and registration patch. Run: mvn -DskipTests package'
 } finally {
     Pop-Location

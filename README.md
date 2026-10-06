@@ -4,9 +4,11 @@
 
 `ReferenceFiducialAutoFeeder` extends OpenPnP's `ReferenceAutoFeeder`. A machine-wide catalog stores reusable fiducial coordinates. Each installation surface assigns three saved marks to `fid_A`, `fid_B`, and `fid_C`; every feeder assigned to that surface uses the same three references. An affine transform derived from top-camera measurements corrects each feeder's nominal XY pick position. Optional part recognition uses the same camera to refine the XY position of a presented part.
 
-![Configuration UI preview](gui-preview.png)
+![Configuration tab preview](gui-preview-configuration.png)
 
-The preview illustrates the custom feeder panel. Choose an installation surface, then choose its saved fiducials from the three dropdowns. The X/Y fields use OpenPnP's standard camera move/capture location buttons. **Save new** stores a captured position, **Update** changes the selected shared mark, and **Delete** removes it from every surface that references it. Checking **Use machine origin (X=0, Y=0)** fixes `fid_C` at the machine coordinate origin and disables its selection and camera controls. The values shown are examples, not machine settings. All labels added by this feeder are in English.
+![Calibration tab preview](gui-preview.png)
+
+The **Configuration** tab uses OpenPnP's standard `ReferenceAutoFeeder` wizard. It retains Part selection, feed and pick retry counts, the nominal X/Y/Z/rotation pick location, feed and post-pick actuators and their values and test buttons, **Move before feed**, and **Recycle supported**. The **Calibration** tab contains the custom controls. Choose an installation surface, then choose its saved fiducials from the three dropdowns. The X/Y fields use OpenPnP's standard camera move/capture location buttons. **Save new** stores a captured position, **Update** changes the selected shared mark, and **Delete** removes it from every surface that references it. Checking **Use machine origin (X=0, Y=0)** fixes `fid_C` at the machine coordinate origin and disables its selection and camera controls. The values shown are examples, not machine settings. All labels added by this feeder are in English.
 
 ## Files
 
@@ -20,7 +22,7 @@ The preview illustrates the custom feeder panel. Choose an installation surface,
 | `.github/workflows/artifacts.yml` | Manually builds the documented `test` baseline and uploads a runnable artifact |
 | `README-ja.md` | Japanese README |
 | `docs/installation-guide-en.md` / `docs/installation-guide-ja.md` | Detailed installation, setup, and trial-run instructions in English and Japanese |
-| `gui-preview.svg` / `gui-preview.png` | Editable UI concept and rendered image |
+| `gui-preview-configuration.svg` / `.png` and `gui-preview.svg` / `.png` | Configuration and Calibration tab previews |
 
 ## Part recognition modes
 
@@ -64,7 +66,7 @@ For a source-built OpenPnP distribution, manually run **Actions â†’ Artifacts â†
 
 - `ThreePointAffineTest` passes, including the three-point mapping and rejection of collinear marks.
 - The added feeder, wizard, and registered `ReferenceMachine` compile against the installed OpenPnP 2.7 JAR and libraries with `javac --release 11`.
-- `BinaryOverlaySmokeTest` confirms that the overlay classes take precedence, OpenPnP lists the new feeder type, shared marks and surfaces serialize, and GUI selection/origin controls are present.
+- `BinaryOverlaySmokeTest` confirms that the overlay classes take precedence, OpenPnP lists the new feeder type, shared marks and surfaces serialize, and separate Configuration and Calibration tabs expose their expected controls.
 - Camera recognition accuracy and machine motion have not been tested on hardware.
 
 The added source is GPL-3.0-or-later, matching OpenPnP's license.

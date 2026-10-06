@@ -58,7 +58,7 @@ jobs:
           foreach ($class in @(
             'org/openpnp/machine/reference/feeder/FiducialCatalog.class',
             'org/openpnp/machine/reference/feeder/ReferenceFiducialAutoFeeder.class',
-            'org/openpnp/machine/reference/feeder/wizards/ReferenceFiducialAutoFeederConfigurationWizard.class'
+            'org/openpnp/machine/reference/feeder/wizards/ReferenceFiducialAutoFeederCalibrationWizard.class'
           )) {
             if ($entries -notcontains $class) { throw "Custom feeder class missing: $class" }
           }

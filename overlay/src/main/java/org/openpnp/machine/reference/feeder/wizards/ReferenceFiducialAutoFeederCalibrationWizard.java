@@ -28,6 +28,7 @@ import javax.swing.border.TitledBorder;
 
 import org.openpnp.gui.MainFrame;
 import org.openpnp.gui.components.LocationButtonsPanel;
+import org.openpnp.gui.support.AbstractConfigurationWizard;
 import org.openpnp.gui.support.DoubleConverter;
 import org.openpnp.gui.support.Helpers;
 import org.openpnp.gui.support.IdentifiableListCellRenderer;
@@ -48,9 +49,8 @@ import org.openpnp.util.UiUtils;
 import org.openpnp.vision.pipeline.ui.CvPipelineEditor;
 import org.openpnp.vision.pipeline.ui.CvPipelineEditorDialog;
 
-/** Configuration panel appended to the standard ReferenceAutoFeeder wizard. */
-public class ReferenceFiducialAutoFeederConfigurationWizard
-        extends ReferenceAutoFeederConfigurationWizard {
+/** Calibration controls shown beside the standard ReferenceAutoFeeder Configuration tab. */
+public class ReferenceFiducialAutoFeederCalibrationWizard extends AbstractConfigurationWizard {
     private final ReferenceFiducialAutoFeeder feeder;
     private final FiducialCatalog catalog;
     private final Runnable catalogListener;
@@ -79,8 +79,8 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
     private final JTextField maxPartShift = new JTextField(6);
     private final JLabel status = new JLabel();
 
-    public ReferenceFiducialAutoFeederConfigurationWizard(ReferenceFiducialAutoFeeder feeder) {
-        super(feeder);
+    public ReferenceFiducialAutoFeederCalibrationWizard(ReferenceFiducialAutoFeeder feeder) {
+        super();
         this.feeder = feeder;
         this.catalog = FiducialCatalog.get();
         feeder.getOrCreateSurface();
@@ -425,7 +425,6 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
 
     @Override
     public void createBindings() {
-        super.createBindings();
         DoubleConverter decimal = new DoubleConverter(Configuration.get().getLengthDisplayFormat());
         IntegerConverter integer = new IntegerConverter();
         addWrappedBinding(feeder, "fiducialPart", fidPart, "selectedItem");

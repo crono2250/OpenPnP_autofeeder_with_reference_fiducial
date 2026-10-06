@@ -28,8 +28,8 @@ powershell.exe -ExecutionPolicy Bypass -File .\Start-CustomOpenPnP.ps1 -InstallD
 ## 4. フィーダーを設定
 
 1. `Feeders` で `New` を押し、`ReferenceFiducialAutoFeeder` を追加します。既存の `ReferenceAutoFeeder` はそのまま残せます。
-2. 通常の自動フィーダーと同様に、Part、フィード用アクチュエータ、必要に応じた Post Pick アクチュエータ、ピック位置 X/Y/Z/回転を設定します。このピック位置は補正前の公称値です。
-3. `Installation surface` で設置面を選びます。初めて作成したフィーダーには `Surface 1` が作成され、その後の新規フィーダーも最初の設置面を使います。面を増やす場合は `New surface`、名称を変える場合は `Rename` を使います。同じ面を選んだフィーダーは `fid_A`、`fid_B`、`fid_C` の選択をすべて共有します。`Delete surface` で面を削除した場合、その面を使用していたフィーダーは別の面を選ぶまで校正できません。
+2. **Configuration** タブには元の `ReferenceAutoFeeder` の項目がすべてあります。Part、Feed Retry Count、Pick Retry Count、公称ピック位置 X/Y/Z/Rotation（OpenPnP の location controls を使用）、Feed と必要に応じた Post Pick のアクチュエータ・値を設定し、各テストボタンで確認します。必要に応じて Move before feed と Recycle supported も設定します。ピック位置は補正前の公称値です。
+3. **Calibration** タブを開いて `Installation surface` で設置面を選びます。初めて作成したフィーダーには `Surface 1` が作成され、その後の新規フィーダーも最初の設置面を使います。面を増やす場合は `New surface`、名称を変える場合は `Rename` を使います。同じ面を選んだフィーダーは `fid_A`、`fid_B`、`fid_C` の選択をすべて共有します。`Delete surface` で面を削除した場合、その面を使用していたフィーダーは別の面を選ぶまで校正できません。
 4. 上側カメラの Default Z を設定します。各マークの位置へカメラを動かし、`Camera controls` の座標取得ボタンを押します。X/Y 欄はカメラで取得し、手入力はできません。`Save new` で新しいマークを共有カタログに保存します。名前は X/Y 座標（mm、小数3桁）から `Fid_-250.000_-200.000` のように自動生成されます。各行のドロップダウンで `fid_A` 左手前、`fid_B` 右手前、`fid_C` 右奥に使用する保存済みマークを選びます。3点は同じマシン座標系に置き、一直線にならないようにします。フィデューシャルの Z と Rotation は指定しません。
 5. 保存済みマークの座標を変える場合は、そのマークをドロップダウンで選択し、カメラで新座標を取得して `Update` を押します。表示名は新座標に合わせて変わり、参照 ID は維持されます。同じマークを選んだすべての設置面・フィーダーが新座標を使います。`Delete` は共有カタログから削除し、全設置面でそのマークの割当を解除します。再運転前に代わりのマークを選んでください。これらの変更は即座に有効になるため、設定を残すには OpenPnP のマシン設定を保存します。
 6. `fid_C` がマシン座標の X=0、Y=0 にある設置面では `Use machine origin (X=0, Y=0)` をチェックします。`fid_C` の選択、X/Y 欄、カメラ操作ボタンが無効になり、校正には原点座標が使われます。マークが原点以外ならチェックを外し、保存済みマークを選んでください。チェック中も選択済みマークへの参照は保持されます。

@@ -4,9 +4,11 @@
 
 `ReferenceFiducialAutoFeeder` は OpenPnP の `ReferenceAutoFeeder` を拡張したフィーダーです。マシン共通のカタログに、再利用できるフィデューシャル座標を保存します。設置面ごとに保存済みマークを `fid_A`、`fid_B`、`fid_C` に割り当て、同じ設置面を選んだすべてのフィーダーがその3点を共有します。上側カメラの実測値から求めたアフィン変換で、各フィーダーの公称ピック位置の XY を補正します。必要に応じて、同じカメラによる部品認識でも XY を補正できます。
 
-![設定画面のイメージ](gui-preview.png)
+![Configuration タブのイメージ](gui-preview-configuration.png)
 
-画面では設置面を選び、3つのドロップダウンで保存済みマークを割り当てます。X/Y 欄には OpenPnP 標準のカメラ移動・座標取得ボタンを使います。**Save new** は取得座標を保存し、**Update** は選択中の共有マークを更新し、**Delete** はそのマークを参照する全設置面から削除します。**Use machine origin (X=0, Y=0)** をチェックすると `fid_C` をマシン座標原点に固定し、その選択とカメラ操作を無効にします。画像中の数値は例であり、実機の設定値ではありません。追加した GUI の表示言語は英語です。
+![Calibration タブのイメージ](gui-preview.png)
+
+**Configuration** タブには OpenPnP 標準の `ReferenceAutoFeeder` 設定画面を使用します。Part、Feed/Pick Retry Count、公称ピック位置 X/Y/Z/Rotation、Feed と Post Pick のアクチュエータ・値・テストボタン、**Move before feed**、**Recycle supported** を残しています。**Calibration** タブには位置補正関連の設定をまとめました。設置面を選び、3つのドロップダウンで保存済みマークを割り当てます。X/Y 欄には OpenPnP 標準のカメラ移動・座標取得ボタンを使います。**Save new** は取得座標を保存し、**Update** は選択中の共有マークを更新し、**Delete** はそのマークを参照する全設置面から削除します。**Use machine origin (X=0, Y=0)** をチェックすると `fid_C` をマシン座標原点に固定し、その選択とカメラ操作を無効にします。画像中の数値は例であり、実機の設定値ではありません。追加した GUI の表示言語は英語です。
 
 ## ファイル
 
@@ -20,7 +22,7 @@
 | `.github/workflows/artifacts.yml` | 手動で `test` の基準版をビルドし、実行用の成果物をアップロードするワークフロー |
 | `README.md` | 英語版 README |
 | `docs/installation-guide-en.md` / `docs/installation-guide-ja.md` | 英語・日本語の導入、設定、試運転手順 |
-| `gui-preview.svg` / `gui-preview.png` | 編集可能な GUI イメージとその画像 |
+| `gui-preview-configuration.svg` / `.png`、`gui-preview.svg` / `.png` | Configuration と Calibration タブの GUI イメージ |
 
 ## 部品認識モード
 
