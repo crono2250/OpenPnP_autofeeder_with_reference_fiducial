@@ -19,7 +19,6 @@ import org.openpnp.model.Configuration;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Part;
-import org.openpnp.machine.reference.vision.ReferenceFiducialLocator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.MachineListener;
@@ -56,6 +55,8 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     private Location fidBLocation = new Location(LengthUnit.Millimeters);
     @Element(required = false)
     private Location fidCLocation = new Location(LengthUnit.Millimeters);
+    @Attribute(required = false)
+    private boolean fidCUseMachineOrigin;
     @Attribute(required = false)
     private String fiducialPartId = "";
     @Attribute(required = false)
@@ -154,11 +155,7 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
         if (part == null) {
             throw new Exception("Fiducial Part ID not found: " + fiducialPartId);
         }
-        if (!(machine.getFiducialLocator() instanceof ReferenceFiducialLocator)) {
-            throw new Exception("ReferenceFiducialLocator is required for fiducial Z and rotation.");
-        }
-        ReferenceFiducialLocator locator = (ReferenceFiducialLocator) machine.getFiducialLocator();
-        Location[] nominal = {fidALocation, fidBLocation, fidCLocation};
+        Location[] nominal = {fidALocation, fidBLocation, getEffectiveFidCLocation()};
         String[] names = {"fid_A", "fid_B", "fid_C"};
         double[][] expected = new double[3][2];
         double[][] observed = new double[3][2];
@@ -179,7 +176,10 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
             // Validate geometry before moving the camera.
             new ThreePointAffine(expected, expected);
             for (int i = 0; i < 3; i++) {
-                Location found = locator.getFiducialLocation(nominal[i], part);
+                // Fiducials are XY points. The locator supplies the camera's default focus Z.
+                Location search = new Location(LengthUnit.Millimeters,
+                        expected[i][0], expected[i][1], 0, 0);
+                Location found = machine.getFiducialLocator().getHomeFiducialLocation(search, part);
                 if (found == null) {
                     throw new Exception(names[i] + " was not detected.");
                 }
@@ -317,6 +317,17 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     public void setFidBLocation(Location value) { fidBLocation = value; invalidateCalibration(); firePropertyChange("fidBLocation", null, value); }
     public Location getFidCLocation() { return fidCLocation; }
     public void setFidCLocation(Location value) { fidCLocation = value; invalidateCalibration(); firePropertyChange("fidCLocation", null, value); }
+    /** The machine coordinate origin is X=0, Y=0; the configured custom location is preserved. */
+    public Location getEffectiveFidCLocation() {
+        return fidCUseMachineOrigin ? new Location(LengthUnit.Millimeters) : fidCLocation;
+    }
+    public boolean isFidCUseMachineOrigin() { return fidCUseMachineOrigin; }
+    public void setFidCUseMachineOrigin(boolean value) {
+        boolean old = fidCUseMachineOrigin;
+        fidCUseMachineOrigin = value;
+        invalidateCalibration();
+        firePropertyChange("fidCUseMachineOrigin", old, value);
+    }
     public String getFiducialPartId() { return fiducialPartId; }
     public void setFiducialPartId(String value) { fiducialPartId = value; invalidateCalibration(); }
     public Part getFiducialPart() {

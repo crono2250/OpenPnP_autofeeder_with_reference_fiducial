@@ -5,6 +5,7 @@
 package org.openpnp.machine.reference.feeder.wizards;
 
 import java.awt.Component;
+import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -35,7 +36,10 @@ import org.openpnp.gui.support.PartsComboBoxModel;
 import org.openpnp.machine.reference.feeder.ReferenceFiducialAutoFeeder;
 import org.openpnp.machine.reference.feeder.ReferenceFiducialAutoFeeder.PartVisionMode;
 import org.openpnp.model.Configuration;
+import org.openpnp.model.Length;
+import org.openpnp.model.Location;
 import org.openpnp.model.Part;
+import org.openpnp.spi.Camera;
 import org.openpnp.util.UiUtils;
 import org.openpnp.vision.pipeline.ui.CvPipelineEditor;
 import org.openpnp.vision.pipeline.ui.CvPipelineEditorDialog;
@@ -46,8 +50,10 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
     private final ReferenceFiducialAutoFeeder feeder;
     private final JTextField[] fidX = {new JTextField(8), new JTextField(8), new JTextField(8)};
     private final JTextField[] fidY = {new JTextField(8), new JTextField(8), new JTextField(8)};
-    private final JTextField[] fidZ = {new JTextField(8), new JTextField(8), new JTextField(8)};
-    private final JTextField[] fidRotation = {new JTextField(8), new JTextField(8), new JTextField(8)};
+    private final JPanel fidCXCards = new JPanel(new CardLayout());
+    private final JPanel fidCYCards = new JPanel(new CardLayout());
+    private final FiducialXYControls[] fidControls = new FiducialXYControls[3];
+    private final JCheckBox useMachineOrigin = new JCheckBox("Use machine origin (X=0, Y=0)");
     private final JComboBox<Part> fidPart = new JComboBox<>();
     private PartsComboBoxModel partsModel;
     private final JTextField maxFidShift = new JTextField(6);
@@ -69,19 +75,24 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
         addMarkCell(marks, new JLabel("Mark / position"), 0, 0);
         addMarkCell(marks, new JLabel("X"), 1, 0);
         addMarkCell(marks, new JLabel("Y"), 2, 0);
-        addMarkCell(marks, new JLabel("Z"), 3, 0);
-        addMarkCell(marks, new JLabel("Rotation"), 4, 0);
-        addMarkCell(marks, new JLabel("Position controls"), 5, 0);
-        String[] names = {"fid_A / front left", "fid_B / front right", "fid_C / rear right (origin)"};
+        addMarkCell(marks, new JLabel("Position controls"), 3, 0);
+        addMarkCell(marks, new JLabel("Machine origin"), 4, 0);
+        String[] names = {"fid_A / front left", "fid_B / front right", "fid_C / rear right"};
+        fidCXCards.add(fidX[2], "custom");
+        fidCXCards.add(disabledOriginField(), "origin");
+        fidCYCards.add(fidY[2], "custom");
+        fidCYCards.add(disabledOriginField(), "origin");
         for (int i = 0; i < 3; i++) {
             addMarkCell(marks, new JLabel(names[i]), 0, i + 1);
-            addMarkCell(marks, fidX[i], 1, i + 1);
-            addMarkCell(marks, fidY[i], 2, i + 1);
-            addMarkCell(marks, fidZ[i], 3, i + 1);
-            addMarkCell(marks, fidRotation[i], 4, i + 1);
-            addMarkCell(marks,
-                    new LocationButtonsPanel(fidX[i], fidY[i], fidZ[i], fidRotation[i]), 5, i + 1);
+            addMarkCell(marks, i == 2 ? fidCXCards : fidX[i], 1, i + 1);
+            addMarkCell(marks, i == 2 ? fidCYCards : fidY[i], 2, i + 1);
+            fidControls[i] = new FiducialXYControls(fidX[i], fidY[i]);
+            addMarkCell(marks, fidControls[i], 3, i + 1);
         }
+        addMarkCell(marks, useMachineOrigin, 4, 3);
+        useMachineOrigin.setSelected(feeder.isFidCUseMachineOrigin());
+        useMachineOrigin.addItemListener(e -> updateFidCControls());
+        updateFidCControls();
 
         JPanel calibration = new JPanel(new GridLayout(0, 2, 8, 5));
         calibration.setBorder(new TitledBorder("Three-point calibration"));
@@ -144,9 +155,41 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
         constraints.gridy = row;
         constraints.insets = new Insets(3, 4, 3, 4);
         constraints.anchor = GridBagConstraints.WEST;
-        constraints.fill = column == 5 ? GridBagConstraints.NONE : GridBagConstraints.HORIZONTAL;
-        constraints.weightx = column == 0 ? 1.4 : column == 5 ? 0 : 1;
+        constraints.fill = column >= 3 ? GridBagConstraints.NONE : GridBagConstraints.HORIZONTAL;
+        constraints.weightx = column == 0 ? 1.4 : column >= 3 ? 0 : 1;
         panel.add(component, constraints);
+    }
+
+    private static JTextField disabledOriginField() {
+        JTextField field = new JTextField("0.000", 8);
+        field.setEnabled(false);
+        return field;
+    }
+
+    private void updateFidCControls() {
+        String card = useMachineOrigin.isSelected() ? "origin" : "custom";
+        ((CardLayout) fidCXCards.getLayout()).show(fidCXCards, card);
+        ((CardLayout) fidCYCards.getLayout()).show(fidCYCards, card);
+        fidControls[2].setEnabled(!useMachineOrigin.isSelected());
+    }
+
+    /** Standard OpenPnP camera location buttons, with XY at the top camera's focus height. */
+    private static final class FiducialXYControls extends LocationButtonsPanel {
+        FiducialXYControls(JTextField x, JTextField y) {
+            super(x, y, null, null);
+            setShowToolButtons(false);
+        }
+
+        @Override
+        public Camera getCamera() throws Exception {
+            Camera camera = Configuration.get().getMachine().getDefaultHead().getDefaultCamera();
+            Length defaultZ = camera.getDefaultZ();
+            if (defaultZ == null) {
+                throw new Exception("Set the top camera Default Z before moving to a fiducial.");
+            }
+            setBaseLocation(new Location(defaultZ.getUnits(), 0, 0, defaultZ.getValue(), 0));
+            return camera;
+        }
     }
 
     private void updateStatus() {
@@ -175,13 +218,10 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
             bind(UpdateStrategy.READ_WRITE, feeder, properties[i], proxies[i], "location");
             addWrappedBinding(proxies[i], "lengthX", fidX[i], "text", length);
             addWrappedBinding(proxies[i], "lengthY", fidY[i], "text", length);
-            addWrappedBinding(proxies[i], "lengthZ", fidZ[i], "text", length);
-            addWrappedBinding(proxies[i], "rotation", fidRotation[i], "text", decimal);
             ComponentDecorators.decorateWithAutoSelectAndLengthConversion(fidX[i]);
             ComponentDecorators.decorateWithAutoSelectAndLengthConversion(fidY[i]);
-            ComponentDecorators.decorateWithAutoSelectAndLengthConversion(fidZ[i]);
-            ComponentDecorators.decorateWithAutoSelect(fidRotation[i]);
         }
+        addWrappedBinding(feeder, "fidCUseMachineOrigin", useMachineOrigin, "selected");
         addWrappedBinding(feeder, "fiducialPart", fidPart, "selectedItem");
         addWrappedBinding(feeder, "maxFiducialShiftMm", maxFidShift, "text", decimal);
         addWrappedBinding(feeder, "maxBasisChangePercent", maxBasisChange, "text", decimal);

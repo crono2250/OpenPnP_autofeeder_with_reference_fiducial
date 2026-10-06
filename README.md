@@ -1,10 +1,10 @@
 # Three-fiducial auto feeder for OpenPnP
 
-`ReferenceFiducialAutoFeeder` extends OpenPnP's `ReferenceAutoFeeder`. It measures three fixed machine fiducials with the top camera: `fid_A` at the front left, `fid_B` at the front right, and `fid_C` at the rear right machine origin. An affine transform derived from those measurements corrects the feeder's nominal XY pick position. Optional part recognition uses the same camera to refine the XY position of a presented part.
+`ReferenceFiducialAutoFeeder` extends OpenPnP's `ReferenceAutoFeeder`. It measures three fixed machine fiducials with the top camera: `fid_A` at the front left, `fid_B` at the front right, and `fid_C` at the rear right, optionally assigned to the machine origin. An affine transform derived from those measurements corrects the feeder's nominal XY pick position. Optional part recognition uses the same camera to refine the XY position of a presented part.
 
 ![Configuration UI preview](gui-preview.png)
 
-The preview illustrates the custom feeder panel. Its fiducial fields use OpenPnP's standard X/Y/Z/Rotation location controls and capture/move buttons. The values shown are examples, not machine settings. All labels added by this feeder are in English.
+The preview illustrates the custom feeder panel. Its fiducial fields contain only X/Y and use OpenPnP's standard camera move/capture location buttons. Checking **Use machine origin (X=0, Y=0)** fixes `fid_C` at the machine coordinate origin and disables its fields and buttons. Uncheck it to capture or enter a custom `fid_C` position. The values shown are examples, not machine settings. All labels added by this feeder are in English.
 
 ## Files
 
@@ -32,7 +32,7 @@ Part vision is initially disabled. The supplied pipeline is OpenPnP's `Reference
 
 ## Calibration behavior
 
-Each fiducial has a nominal X/Y/Z/Rotation location entered with OpenPnP's location controls. The configured fiducial Part is selected from a dropdown backed by OpenPnP's Parts list. Detection uses `ReferenceFiducialLocator`, so the fiducial's Z and rotation are used for camera positioning and vision setup. Only XY is transformed for the pick location.
+Each fiducial has a nominal X/Y position entered with OpenPnP's location controls. The configured fiducial Part is selected from a dropdown backed by OpenPnP's Parts list. The fiducial locator uses the top camera's Default Z for detection; fiducial Z and rotation are neither entered nor used. Checking **Use machine origin** sets the effective `fid_C` position to X=0, Y=0. A custom `fid_C` position is retained when the checkbox is toggled and used when unchecked. The origin option refers to OpenPnP's machine coordinate origin, so leave it unchecked when the physical mark is elsewhere. Only XY is transformed for the pick location.
 
 Calibration is queued after homing and performed again for each feeder used at job start. If periodic calibration is enabled, it runs when its interval has elapsed and the machine is idle, or before the next feed. A failed or out-of-limit measurement invalidates the previous transform and prevents that feeder from preparing or feeding until calibration succeeds. Multiple feeders are calibrated independently.
 

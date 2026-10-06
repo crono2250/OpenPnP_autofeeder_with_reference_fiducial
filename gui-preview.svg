@@ -7,6 +7,7 @@
       .field { fill: #fff; stroke: #adbcc5; stroke-width: 1.3; rx: 5; }
       .section { fill: #f7f9fa; stroke: #cbd6dc; stroke-width: 1.2; rx: 9; }
       .button { fill: #eff2f4; stroke: #aeb9bf; stroke-width: 1.2; rx: 3; }
+      .disabled { fill: #e5e9eb; stroke: #b7c0c5; stroke-width: 1.3; rx: 5; }
       .light { fill: #fff; }
     </style>
     <g id="location-controls">
@@ -14,14 +15,8 @@
       <path d="M11 12 V8 H16 M25 8 H30 V12 M11 22 V26 H16 M25 26 H30 V22" fill="none" stroke="#e24242" stroke-width="2.3"/>
       <circle cx="20.5" cy="17" r="4.7" fill="none" stroke="#1680d1" stroke-width="2"/>
       <rect x="47" y="0" width="41" height="34" class="button"/>
-      <path d="M57 9 H78 L72 16 H63 Z" fill="#d94141"/>
-      <circle cx="68" cy="22" r="5.2" fill="none" stroke="#1680d1" stroke-width="2"/>
-      <rect x="103" y="0" width="41" height="34" class="button"/>
-      <path d="M114 12 V8 H119 M128 8 H133 V12 M114 22 V26 H119 M128 26 H133 V22" fill="none" stroke="#1680d1" stroke-width="2.3"/>
-      <circle cx="123.5" cy="17" r="4.5" fill="none" stroke="#1680d1" stroke-width="2"/>
-      <rect x="150" y="0" width="41" height="34" class="button"/>
-      <path d="M160 10 H181 L174 16 H167 Z" fill="#1680d1"/>
-      <path d="M170.5 17 V26" stroke="#1680d1" stroke-width="2.4"/>
+      <path d="M58 12 V8 H63 M72 8 H77 V12 M58 22 V26 H63 M72 26 H77 V22" fill="none" stroke="#1680d1" stroke-width="2.3"/>
+      <circle cx="67.5" cy="17" r="4.5" fill="none" stroke="#1680d1" stroke-width="2"/>
     </g>
   </defs>
   <rect width="1280" height="850" fill="#e9eef1"/>
@@ -40,40 +35,32 @@
   <rect x="245" y="141" width="999" height="244" class="section"/>
   <text x="265" y="172" class="section-title">Machine fiducials</text>
   <text x="265" y="204" class="small">Mark</text>
-  <text x="414" y="204" class="small">X</text>
-  <text x="526" y="204" class="small">Y</text>
-  <text x="638" y="204" class="small">Z</text>
-  <text x="750" y="204" class="small">Rotation</text>
-  <text x="862" y="204" class="small">OpenPnP location controls</text>
+  <text x="460" y="204" class="small">X</text>
+  <text x="596" y="204" class="small">Y</text>
+  <text x="735" y="204" class="small">Camera controls</text>
+  <text x="877" y="204" class="small">Machine origin</text>
   <text x="266" y="244" class="label">fid_A  Front left</text>
   <text x="266" y="294" class="label">fid_B  Front right</text>
   <text x="266" y="344" class="label">fid_C  Rear right</text>
   <g>
-    <rect x="402" y="219" width="104" height="34" class="field"/><text x="412" y="241" class="label">-250.000</text>
-    <rect x="514" y="219" width="104" height="34" class="field"/><text x="524" y="241" class="label">-200.000</text>
-    <rect x="626" y="219" width="104" height="34" class="field"/><text x="636" y="241" class="label">0.000</text>
-    <rect x="738" y="219" width="104" height="34" class="field"/><text x="748" y="241" class="label">0.000</text>
-    <use href="#location-controls" x="854" y="219"/>
+    <rect x="448" y="219" width="116" height="34" class="field"/><text x="458" y="241" class="label">-250.000</text>
+    <rect x="584" y="219" width="116" height="34" class="field"/><text x="594" y="241" class="label">-200.000</text>
+    <use href="#location-controls" x="730" y="219"/>
   </g>
   <g>
-    <rect x="402" y="269" width="104" height="34" class="field"/><text x="412" y="291" class="label">0.000</text>
-    <rect x="514" y="269" width="104" height="34" class="field"/><text x="524" y="291" class="label">-200.000</text>
-    <rect x="626" y="269" width="104" height="34" class="field"/><text x="636" y="291" class="label">0.000</text>
-    <rect x="738" y="269" width="104" height="34" class="field"/><text x="748" y="291" class="label">0.000</text>
-    <use href="#location-controls" x="854" y="269"/>
+    <rect x="448" y="269" width="116" height="34" class="field"/><text x="458" y="291" class="label">0.000</text>
+    <rect x="584" y="269" width="116" height="34" class="field"/><text x="594" y="291" class="label">-200.000</text>
+    <use href="#location-controls" x="730" y="269"/>
   </g>
   <g>
-    <rect x="402" y="319" width="104" height="34" class="field"/><text x="412" y="341" class="label">0.000</text>
-    <rect x="514" y="319" width="104" height="34" class="field"/><text x="524" y="341" class="label">0.000</text>
-    <rect x="626" y="319" width="104" height="34" class="field"/><text x="636" y="341" class="label">0.000</text>
-    <rect x="738" y="319" width="104" height="34" class="field"/><text x="748" y="341" class="label">0.000</text>
-    <use href="#location-controls" x="854" y="319"/>
+    <rect x="448" y="319" width="116" height="34" class="disabled"/><text x="458" y="341" class="small">0.000</text>
+    <rect x="584" y="319" width="116" height="34" class="disabled"/><text x="594" y="341" class="small">0.000</text>
+    <use href="#location-controls" x="730" y="319" opacity="0.38"/>
   </g>
-  <text x="1137" y="239" class="small">C</text>
-  <text x="1147" y="266" class="small">│</text>
-  <text x="1147" y="289" class="small">│</text>
-  <text x="1060" y="330" class="small">A ───── B</text>
-  <text x="1060" y="356" class="small">Illustrative values</text>
+  <rect x="878" y="327" width="18" height="18" fill="#fff" stroke="#93a6b2"/>
+  <path d="M881 336 L886 341 L894 330" fill="none" stroke="#2378b9" stroke-width="2.6"/>
+  <text x="906" y="342" class="label">Use machine origin (X=0, Y=0)</text>
+  <text x="878" y="371" class="small">Uncheck to enter fid_C coordinates</text>
 
   <rect x="245" y="402" width="486" height="410" class="section"/>
   <text x="265" y="434" class="section-title">Three-point calibration</text>
