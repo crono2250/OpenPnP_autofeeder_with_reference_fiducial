@@ -19,6 +19,7 @@ import org.openpnp.model.Configuration;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Part;
+import org.openpnp.machine.reference.vision.ReferenceFiducialLocator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.MachineListener;
@@ -32,6 +33,17 @@ import org.pmw.tinylog.Logger;
 
 /** ReferenceAutoFeeder with three machine fiducials and optional top-camera part vision. */
 public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
+    public enum PartVisionMode {
+        EveryFeed("Every feed"),
+        FirstFeedInJob("First feed in job"),
+        ManualOnly("Manual only");
+
+        private final String label;
+
+        PartVisionMode(String label) { this.label = label; }
+        @Override public String toString() { return label; }
+    }
+
     private static final ScheduledExecutorService TIMER = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread thread = new Thread(r, "fiducial-feeder-timer");
         thread.setDaemon(true);
@@ -57,12 +69,15 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     @Attribute(required = false)
     private boolean partVisionEnabled;
     @Attribute(required = false)
+    private PartVisionMode partVisionMode = PartVisionMode.EveryFeed;
+    @Attribute(required = false)
     private double maxPartShiftMm = 1.0;
     @Element(required = false)
     private CvPipeline partPipeline = ReferenceLoosePartFeeder.createDefaultPipeline();
 
     private transient volatile ThreePointAffine transform;
     private transient volatile Location measuredPickLocation;
+    private transient volatile boolean partVisionDoneForJob;
     private transient volatile long lastCalibrationNanos;
     private transient volatile Instant lastCalibrationTime;
     private transient volatile String lastCalibrationError;
@@ -122,6 +137,7 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     public synchronized void invalidateCalibration() {
         transform = null;
         measuredPickLocation = null;
+        partVisionDoneForJob = false;
         lastCalibrationNanos = 0;
     }
 
@@ -138,6 +154,10 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
         if (part == null) {
             throw new Exception("Fiducial Part ID not found: " + fiducialPartId);
         }
+        if (!(machine.getFiducialLocator() instanceof ReferenceFiducialLocator)) {
+            throw new Exception("ReferenceFiducialLocator is required for fiducial Z and rotation.");
+        }
+        ReferenceFiducialLocator locator = (ReferenceFiducialLocator) machine.getFiducialLocator();
         Location[] nominal = {fidALocation, fidBLocation, fidCLocation};
         String[] names = {"fid_A", "fid_B", "fid_C"};
         double[][] expected = new double[3][2];
@@ -159,7 +179,7 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
             // Validate geometry before moving the camera.
             new ThreePointAffine(expected, expected);
             for (int i = 0; i < 3; i++) {
-                Location found = machine.getFiducialLocator().getHomeFiducialLocation(nominal[i], part);
+                Location found = locator.getFiducialLocation(nominal[i], part);
                 if (found == null) {
                     throw new Exception(names[i] + " was not detected.");
                 }
@@ -198,6 +218,7 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     @Override
     public void prepareForJob(boolean visit) throws Exception {
         // OpenPnP calls this for every feeder used by the job.
+        partVisionDoneForJob = false;
         ensureCalibration(true);
     }
 
@@ -211,9 +232,22 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
             throw new Exception("Set a feed actuator before using feeder " + getName());
         }
         super.feed(nozzle);
-        if (partVisionEnabled && option != FeedOptions.Disable) {
+        if (partVisionEnabled && option != FeedOptions.Disable
+                && (getPartVisionMode() == PartVisionMode.EveryFeed
+                        || getPartVisionMode() == PartVisionMode.FirstFeedInJob && !partVisionDoneForJob)) {
             measuredPickLocation = locatePart(nozzle.getHead().getDefaultCamera());
+            partVisionDoneForJob = true;
         }
+    }
+
+    /** Run part recognition on demand, after a part has been presented. */
+    public synchronized void locatePartNow() throws Exception {
+        if (!partVisionEnabled) {
+            throw new Exception("Enable part vision before manual recognition.");
+        }
+        ensureCalibration(false);
+        measuredPickLocation = null;
+        measuredPickLocation = locatePart(Configuration.get().getMachine().getDefaultHead().getDefaultCamera());
     }
 
     @Override
@@ -285,6 +319,16 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     public void setFidCLocation(Location value) { fidCLocation = value; invalidateCalibration(); firePropertyChange("fidCLocation", null, value); }
     public String getFiducialPartId() { return fiducialPartId; }
     public void setFiducialPartId(String value) { fiducialPartId = value; invalidateCalibration(); }
+    public Part getFiducialPart() {
+        return fiducialPartId == null || fiducialPartId.isEmpty()
+                ? null : Configuration.get().getPart(fiducialPartId);
+    }
+    public void setFiducialPart(Part value) {
+        Part old = getFiducialPart();
+        fiducialPartId = value == null ? "" : value.getId();
+        invalidateCalibration();
+        firePropertyChange("fiducialPart", old, value);
+    }
     public boolean isPeriodicCalibration() { return periodicCalibration; }
     public void setPeriodicCalibration(boolean value) { periodicCalibration = value; }
     public int getCalibrationIntervalMinutes() { return calibrationIntervalMinutes; }
@@ -295,6 +339,13 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     public void setMaxBasisChangePercent(double value) { maxBasisChangePercent = value; }
     public boolean isPartVisionEnabled() { return partVisionEnabled; }
     public void setPartVisionEnabled(boolean value) { partVisionEnabled = value; }
+    public PartVisionMode getPartVisionMode() {
+        return partVisionMode == null ? PartVisionMode.EveryFeed : partVisionMode;
+    }
+    public void setPartVisionMode(PartVisionMode value) {
+        partVisionMode = value == null ? PartVisionMode.EveryFeed : value;
+        partVisionDoneForJob = false;
+    }
     public double getMaxPartShiftMm() { return maxPartShiftMm; }
     public void setMaxPartShiftMm(double value) { maxPartShiftMm = value; }
     public CvPipeline getPartPipeline() { return partPipeline; }

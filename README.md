@@ -1,42 +1,60 @@
-# OpenPnP 3点基準フィデューシャル付き自動フィーダー
+# Three-fiducial auto feeder for OpenPnP
 
-OpenPnP `test` ブランチの `ReferenceAutoFeeder` を拡張した `ReferenceFiducialAutoFeeder` です。固定マーク `fid_A`（左手前）、`fid_B`（右手前）、`fid_C`（右奥のマシン原点）を上側カメラで測定し、3点から求めた XY アフィン変換をフィーダーの公称ピック位置に適用します。給材後の部品認識にも同じカメラを使用できます。
+`ReferenceFiducialAutoFeeder` extends OpenPnP's `ReferenceAutoFeeder`. It measures three fixed machine fiducials with the top camera: `fid_A` at the front left, `fid_B` at the front right, and `fid_C` at the rear right machine origin. An affine transform derived from those measurements corrects the feeder's nominal XY pick position. Optional part recognition uses the same camera to refine the XY position of a presented part.
 
-![OpenPnP 設定画面のイメージ](gui-preview.png)
+![Configuration UI preview](gui-preview.png)
 
-## 収録内容
+The preview illustrates the custom feeder panel. Its fiducial fields use OpenPnP's standard X/Y/Z/Rotation location controls and capture/move buttons. The values shown are examples, not machine settings. All labels added by this feeder are in English.
 
-| ファイル | 用途 |
+## Files
+
+| Path | Purpose |
 | --- | --- |
-| `overlay/src/main/java/...` | フィーダー、3点変換、設定 GUI の Java ソース |
-| `register-feeder.patch` | `ReferenceMachine` のフィーダー一覧への登録 |
-| `openpnp-fiducial-auto-feeder-50dcdce.jar` | この端末にある OpenPnP 2.7 / `50dcdce` 専用の追加クラス |
-| `Start-CustomOpenPnP.ps1` | 既存インストールを変更せず、追加 JAR を先に読み込んで起動 |
-| `Apply-To-OpenPnP-Test.ps1` | OpenPnP `test` のソースへ変更を適用 |
-| `docs/導入手順.md` | バイナリ版の起動、設定、試運転、ソースからのビルド |
-| `gui-preview.svg` | GUI のイメージ図。数値は例であり実機の設定値ではありません |
+| `overlay/src/main/java/...` | Feeder, three-point transform, and configuration wizard source |
+| `register-feeder.patch` | Registers the new type in `ReferenceMachine` |
+| `openpnp-fiducial-auto-feeder-50dcdce.jar` | Overlay classes for OpenPnP 2.7 build `50dcdce` |
+| `Start-CustomOpenPnP.ps1` | Starts that binary with the overlay JAR first on the classpath |
+| `Apply-To-OpenPnP-Test.ps1` | Applies the source changes to an OpenPnP `test` checkout |
+| `docs/installation-guide-ja.md` | Detailed installation, setup, and trial-run instructions in Japanese |
+| `gui-preview.svg` / `gui-preview.png` | Editable UI concept and rendered image |
 
-## 対象版
+## Part recognition modes
 
-- ソースの基準: [`openpnp/openpnp` の `test`](https://github.com/openpnp/openpnp/tree/test)、取得時のコミット `e6274b38f9d6f25e98677f75edde6c4bc7a9ee71`。
-- 同梱 JAR の対象: この端末にインストールされている OpenPnP 2.7、`Implementation-Version: 2026-07-03_22-12-05.50dcdce`。起動スクリプトは異なる版を検出すると停止します。
-- Java ソースは Java 11 互換でコンパイルしました。
+Enable **Recognize the fed part with the top camera**, then select one of the following modes:
 
-## 動作概要
+| Mode | Behavior |
+| --- | --- |
+| **Every feed** | Recognizes the presented part after each feed, including a skipped physical feed. This was the behavior of the first implementation. |
+| **First feed in job** | Recognizes once on the first feed after OpenPnP prepares this feeder for a job. Later feeds in that job use the three-point corrected nominal position. |
+| **Manual only** | Does not recognize during feed. Use **Locate part now** after presenting a part and before picking it. Continuous jobs do not pause automatically for this action; use manual or step operation. |
 
-原点復帰後に自動測定を予約し、ジョブ開始時には使用するフィーダーを必ず再測定します。定期校正を有効にすると、指定間隔が過ぎたとき、待機中または次の給材前に再測定します。測定に失敗した場合は補正を無効にし、そのフィーダーのジョブ準備または給材をエラーで止めます。Z はアフィン変換せず、フィーダーに設定した値を使います。
+Part vision is initially disabled. The supplied pipeline is OpenPnP's `ReferenceLoosePartFeeder` pipeline; adapt it to the actual part, lighting, and background before enabling recognition. It must return `RotatedRect` results. The closest result within the configured distance limit supplies XY. The feeder retains the configured Z and corrected nominal rotation.
 
-部品認識は初期状態では無効です。部品に合わせてパイプラインを調整した後に有効にしてください。パイプラインは `RotatedRect` の `results` を返す必要があります。最も公称位置に近い検出結果の XY を使用し、許容ずれを超える場合はエラーにします。回転角は部品認識で変更しません。
+## Calibration behavior
 
-同じ3点を複数のフィーダーで使用する場合、各フィーダーに同じ基準点と Part ID を設定します。ジョブ準備では各フィーダーが個別に3点を再測定します。
+Each fiducial has a nominal X/Y/Z/Rotation location entered with OpenPnP's location controls. The configured fiducial Part is selected from a dropdown backed by OpenPnP's Parts list. Detection uses `ReferenceFiducialLocator`, so the fiducial's Z and rotation are used for camera positioning and vision setup. Only XY is transformed for the pick location.
 
-## 検証
+Calibration is queued after homing and performed again for each feeder used at job start. If periodic calibration is enabled, it runs when its interval has elapsed and the machine is idle, or before the next feed. A failed or out-of-limit measurement invalidates the previous transform and prevents that feeder from preparing or feeding until calibration succeeds. Multiple feeders are calibrated independently.
 
-- 3点変換の単体テスト: `ThreePointAffineTest passed`。
-- OpenPnP 2.7 `50dcdce` のインストール済み JAR と依存 JAR をクラスパスにして、追加クラスおよび登録済み `ReferenceMachine` を `javac --release 11` でコンパイルしました。
-- 上書き JAR が元の JAR より先に読み込まれることを `BinaryOverlaySmokeTest` で確認しました。
-- カメラと実機を使った認識精度・動作確認は未実施です。初回は低速で、ノズルを安全な高さにして試運転してください。
+## Supported builds and installation
 
-## ライセンス
+- Source baseline: [`openpnp/openpnp` `test`](https://github.com/openpnp/openpnp/tree/test) at `e6274b38f9d6f25e98677f75edde6c4bc7a9ee71`.
+- Bundled overlay JAR: the installed OpenPnP 2.7 binary with manifest `Implementation-Version: 2026-07-03_22-12-05.50dcdce`. The launcher rejects another build.
+- Java source and the overlay JAR are compiled for Java 11.
 
-追加ソースは OpenPnP と同じ GPL-3.0-or-later として提供します。`ReferenceMachine` の変更は元の OpenPnP の GPL に従います。
+To use the matching installed binary without modifying its program files:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File .\Start-CustomOpenPnP.ps1 -InstallDir 'C:\Program Files\OpenPnP'
+```
+
+Follow [the installation guide](docs/installation-guide-ja.md) for machine backup, fiducial Part setup, feeder configuration, the three recognition modes, and cautious trial runs. For a different OpenPnP binary, apply the source patch to the corresponding source revision and build a matching version.
+
+## Verification and limits
+
+- `ThreePointAffineTest` passes, including the three-point mapping and rejection of collinear marks.
+- The added feeder, wizard, and registered `ReferenceMachine` compile against the installed OpenPnP 2.7 JAR and libraries with `javac --release 11`.
+- `BinaryOverlaySmokeTest` confirms that the overlay classes take precedence and that OpenPnP lists the new feeder type.
+- Camera recognition accuracy and machine motion have not been tested on hardware.
+
+The added source is GPL-3.0-or-later, matching OpenPnP's license.

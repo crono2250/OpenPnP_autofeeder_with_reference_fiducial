@@ -1,55 +1,114 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="770" viewBox="0 0 1280 770">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="850" viewBox="0 0 1280 850">
   <defs>
     <style>
-      text { font-family: 'Yu Gothic', 'Meiryo', 'Segoe UI', sans-serif; fill: #263238; }
-      .small { font-size: 14px; } .label { font-size: 16px; } .title { font-size: 19px; font-weight: 700; }
+      text { font-family: 'Segoe UI', Arial, sans-serif; fill: #263238; }
+      .title { font-size: 20px; font-weight: 700; } .section-title { font-size: 18px; font-weight: 700; }
+      .label { font-size: 15px; } .small { font-size: 13px; fill: #596b75; }
+      .field { fill: #fff; stroke: #adbcc5; stroke-width: 1.3; rx: 5; }
+      .section { fill: #f7f9fa; stroke: #cbd6dc; stroke-width: 1.2; rx: 9; }
+      .button { fill: #eff2f4; stroke: #aeb9bf; stroke-width: 1.2; rx: 3; }
       .light { fill: #fff; }
-      .field { fill: #fff; stroke: #b4c0c7; stroke-width: 1.3; rx: 5; }
-      .section { fill: #f7f9fa; stroke: #cdd6db; stroke-width: 1.2; rx: 9; }
     </style>
+    <g id="location-controls">
+      <rect x="0" y="0" width="41" height="34" class="button"/>
+      <path d="M11 12 V8 H16 M25 8 H30 V12 M11 22 V26 H16 M25 26 H30 V22" fill="none" stroke="#e24242" stroke-width="2.3"/>
+      <circle cx="20.5" cy="17" r="4.7" fill="none" stroke="#1680d1" stroke-width="2"/>
+      <rect x="47" y="0" width="41" height="34" class="button"/>
+      <path d="M57 9 H78 L72 16 H63 Z" fill="#d94141"/>
+      <circle cx="68" cy="22" r="5.2" fill="none" stroke="#1680d1" stroke-width="2"/>
+      <rect x="103" y="0" width="41" height="34" class="button"/>
+      <path d="M114 12 V8 H119 M128 8 H133 V12 M114 22 V26 H119 M128 26 H133 V22" fill="none" stroke="#1680d1" stroke-width="2.3"/>
+      <circle cx="123.5" cy="17" r="4.5" fill="none" stroke="#1680d1" stroke-width="2"/>
+      <rect x="150" y="0" width="41" height="34" class="button"/>
+      <path d="M160 10 H181 L174 16 H167 Z" fill="#1680d1"/>
+      <path d="M170.5 17 V26" stroke="#1680d1" stroke-width="2.4"/>
+    </g>
   </defs>
-  <rect width="1280" height="770" fill="#e9eef1"/>
-  <rect width="1280" height="48" fill="#34454f"/>
-  <text x="25" y="31" class="light" font-size="17" font-weight="700">OpenPnP 2.7 — Feeders</text>
-  <rect x="0" y="48" width="225" height="722" fill="#f5f7f8" stroke="#d1dade"/>
-  <text x="20" y="83" class="title">フィーダー</text>
-  <rect x="12" y="106" width="201" height="38" rx="5" fill="#dcebf3"/>
-  <text x="24" y="131" class="label">F01  Fiducial Auto Feeder</text>
-  <text x="24" y="174" class="small">F02  ReferenceAutoFeeder</text>
-  <text x="24" y="207" class="small">F03  ReferenceStripFeeder</text>
-  <rect x="244" y="65" width="1018" height="688" rx="9" fill="#fff" stroke="#cbd5da"/>
-  <text x="267" y="98" class="title">F01 — ReferenceFiducialAutoFeeder</text>
-  <text x="267" y="124" class="small" fill="#5d6d75">通常の ReferenceAutoFeeder 設定に、次の補正設定が加わります</text>
-  <rect x="263" y="147" width="600" height="284" class="section"/>
-  <text x="282" y="179" class="title">3点の固定フィデューシャル</text>
-  <text x="286" y="213" class="small">基準マーク</text><text x="512" y="213" class="small">X (mm)</text><text x="681" y="213" class="small">Y (mm)</text>
-  <text x="286" y="251" class="label">fid_A  左手前</text>
-  <rect x="499" y="225" width="146" height="35" class="field"/><text x="511" y="248" class="label">-250.000</text>
-  <rect x="666" y="225" width="146" height="35" class="field"/><text x="678" y="248" class="label">-200.000</text>
-  <text x="286" y="300" class="label">fid_B  右手前</text>
-  <rect x="499" y="274" width="146" height="35" class="field"/><text x="511" y="297" class="label">0.000</text>
-  <rect x="666" y="274" width="146" height="35" class="field"/><text x="678" y="297" class="label">-200.000</text>
-  <text x="286" y="349" class="label">fid_C  右奥・原点</text>
-  <rect x="499" y="323" width="146" height="35" class="field"/><text x="511" y="346" class="label">0.000</text>
-  <rect x="666" y="323" width="146" height="35" class="field"/><text x="678" y="346" class="label">0.000</text>
-  <text x="286" y="397" class="small" fill="#5d6d75">※ 表示値は配置の例。実機で測定した値を入力します。</text>
-  <rect x="883" y="147" width="354" height="284" class="section"/>
-  <text x="905" y="179" class="title">マーク配置</text>
-  <path d="M944 360 L1157 360 L1157 220 Z" fill="#e2f1e8" stroke="#66a982" stroke-width="2"/>
-  <circle cx="944" cy="360" r="10" fill="#2e8b57"/><circle cx="1157" cy="360" r="10" fill="#2e8b57"/><circle cx="1157" cy="220" r="10" fill="#2e8b57"/>
-  <text x="922" y="392" class="small">fid_A</text><text x="1131" y="392" class="small">fid_B</text><text x="1128" y="202" class="small">fid_C</text>
-  <text x="905" y="414" class="small" fill="#5d6d75">測定した3点から XY 補正を算出</text>
-  <rect x="263" y="447" width="600" height="278" class="section"/>
-  <text x="282" y="479" class="title">校正とトリガー</text>
-  <text x="286" y="515" class="label">フィデューシャル Part ID</text><rect x="565" y="491" width="240" height="35" class="field"/><text x="577" y="515" class="label">FIDUCIAL-HOME</text>
-  <text x="286" y="558" class="label">マーク移動の上限</text><rect x="565" y="534" width="112" height="35" class="field"/><text x="577" y="558" class="label">3.0 mm</text>
-  <text x="286" y="602" class="label">□ 定期校正を有効化</text><rect x="565" y="578" width="112" height="35" class="field"/><text x="577" y="602" class="label">5 分</text>
-  <rect x="283" y="647" width="144" height="38" rx="5" fill="#2677a4"/><text x="303" y="672" class="label light">今すぐ校正</text>
-  <text x="449" y="673" class="small" fill="#407457">最終校正 11:42:08</text>
-  <rect x="883" y="447" width="354" height="278" class="section"/>
-  <text x="905" y="479" class="title">上側カメラによる部品認識</text>
-  <text x="905" y="518" class="label">☑ 給材後に部品を検出</text>
-  <text x="905" y="558" class="label">部品位置ずれ上限</text><rect x="1083" y="534" width="123" height="35" class="field"/><text x="1095" y="558" class="label">1.0 mm</text>
-  <rect x="905" y="602" width="170" height="38" rx="5" fill="#fff" stroke="#7f9aad"/><text x="924" y="627" class="label">パイプライン編集</text>
-  <text x="905" y="677" class="small" fill="#5d6d75">検出結果でピック位置の XY を再補正</text>
+  <rect width="1280" height="850" fill="#e9eef1"/>
+  <rect width="1280" height="49" fill="#34454f"/>
+  <text x="24" y="32" class="light" font-size="17" font-weight="700">OpenPnP 2.7 — Feeders</text>
+  <rect x="0" y="49" width="213" height="801" fill="#f4f7f8" stroke="#cbd6dc"/>
+  <text x="20" y="85" class="section-title">Feeders</text>
+  <rect x="12" y="105" width="189" height="39" rx="5" fill="#dcebf3"/>
+  <text x="22" y="130" class="label">F01  Fiducial Auto Feeder</text>
+  <text x="22" y="177" class="label">F02  ReferenceAutoFeeder</text>
+  <text x="22" y="211" class="label">F03  ReferenceStripFeeder</text>
+  <rect x="228" y="65" width="1035" height="767" rx="10" fill="#fff" stroke="#cbd5da"/>
+  <text x="248" y="99" class="title">F01 — ReferenceFiducialAutoFeeder</text>
+  <text x="248" y="122" class="small">Standard auto feeder settings with machine fiducials and optional top-camera part recognition</text>
+
+  <rect x="245" y="141" width="999" height="244" class="section"/>
+  <text x="265" y="172" class="section-title">Machine fiducials</text>
+  <text x="265" y="204" class="small">Mark</text>
+  <text x="414" y="204" class="small">X</text>
+  <text x="526" y="204" class="small">Y</text>
+  <text x="638" y="204" class="small">Z</text>
+  <text x="750" y="204" class="small">Rotation</text>
+  <text x="862" y="204" class="small">OpenPnP location controls</text>
+  <text x="266" y="244" class="label">fid_A  Front left</text>
+  <text x="266" y="294" class="label">fid_B  Front right</text>
+  <text x="266" y="344" class="label">fid_C  Rear right</text>
+  <g>
+    <rect x="402" y="219" width="104" height="34" class="field"/><text x="412" y="241" class="label">-250.000</text>
+    <rect x="514" y="219" width="104" height="34" class="field"/><text x="524" y="241" class="label">-200.000</text>
+    <rect x="626" y="219" width="104" height="34" class="field"/><text x="636" y="241" class="label">0.000</text>
+    <rect x="738" y="219" width="104" height="34" class="field"/><text x="748" y="241" class="label">0.000</text>
+    <use href="#location-controls" x="854" y="219"/>
+  </g>
+  <g>
+    <rect x="402" y="269" width="104" height="34" class="field"/><text x="412" y="291" class="label">0.000</text>
+    <rect x="514" y="269" width="104" height="34" class="field"/><text x="524" y="291" class="label">-200.000</text>
+    <rect x="626" y="269" width="104" height="34" class="field"/><text x="636" y="291" class="label">0.000</text>
+    <rect x="738" y="269" width="104" height="34" class="field"/><text x="748" y="291" class="label">0.000</text>
+    <use href="#location-controls" x="854" y="269"/>
+  </g>
+  <g>
+    <rect x="402" y="319" width="104" height="34" class="field"/><text x="412" y="341" class="label">0.000</text>
+    <rect x="514" y="319" width="104" height="34" class="field"/><text x="524" y="341" class="label">0.000</text>
+    <rect x="626" y="319" width="104" height="34" class="field"/><text x="636" y="341" class="label">0.000</text>
+    <rect x="738" y="319" width="104" height="34" class="field"/><text x="748" y="341" class="label">0.000</text>
+    <use href="#location-controls" x="854" y="319"/>
+  </g>
+  <text x="1137" y="239" class="small">C</text>
+  <text x="1147" y="266" class="small">│</text>
+  <text x="1147" y="289" class="small">│</text>
+  <text x="1060" y="330" class="small">A ───── B</text>
+  <text x="1060" y="356" class="small">Illustrative values</text>
+
+  <rect x="245" y="402" width="486" height="410" class="section"/>
+  <text x="265" y="434" class="section-title">Three-point calibration</text>
+  <text x="266" y="477" class="label">Fiducial Part</text>
+  <rect x="458" y="452" width="246" height="35" class="field"/>
+  <text x="470" y="475" class="label">FIDUCIAL-HOME</text><path d="M682 467 L692 467 L687 473 Z" fill="#49616f"/>
+  <text x="266" y="527" class="label">Maximum mark shift</text>
+  <rect x="458" y="502" width="118" height="35" class="field"/><text x="470" y="525" class="label">3.0 mm</text>
+  <text x="266" y="577" class="label">Maximum scale / shear</text>
+  <rect x="458" y="552" width="118" height="35" class="field"/><text x="470" y="575" class="label">1.0 %</text>
+  <rect x="267" y="613" width="18" height="18" fill="#fff" stroke="#93a6b2"/>
+  <text x="296" y="628" class="label">Enable periodic calibration</text>
+  <text x="266" y="679" class="label">Interval</text>
+  <rect x="458" y="654" width="118" height="35" class="field"/><text x="470" y="677" class="label">5 min</text>
+  <rect x="266" y="719" width="140" height="39" rx="5" fill="#2677a4"/>
+  <text x="286" y="745" class="label light">Calibrate now</text>
+  <text x="424" y="744" class="small">Last calibration 11:42:08</text>
+
+  <rect x="747" y="402" width="497" height="410" class="section"/>
+  <text x="768" y="434" class="section-title">Top-camera part recognition</text>
+  <rect x="769" y="460" width="18" height="18" fill="#fff" stroke="#93a6b2"/>
+  <path d="M772 468 L777 474 L785 463" fill="none" stroke="#2378b9" stroke-width="2.6"/>
+  <text x="798" y="475" class="label">Recognize the fed part</text>
+  <text x="768" y="529" class="label">Recognition mode</text>
+  <rect x="982" y="504" width="238" height="36" class="field"/>
+  <text x="995" y="528" class="label">First feed in job</text>
+  <path d="M1198 519 L1208 519 L1203 525 Z" fill="#49616f"/>
+  <text x="768" y="578" class="label">Maximum part shift</text>
+  <rect x="982" y="553" width="121" height="35" class="field"/><text x="995" y="576" class="label">1.0 mm</text>
+  <rect x="768" y="616" width="159" height="39" rx="5" fill="#fff" stroke="#84a0b0"/>
+  <text x="788" y="642" class="label">Locate part now</text>
+  <rect x="768" y="676" width="173" height="39" rx="5" fill="#fff" stroke="#84a0b0"/>
+  <text x="786" y="702" class="label">Edit part pipeline</text>
+  <rect x="957" y="676" width="170" height="39" rx="5" fill="#fff" stroke="#84a0b0"/>
+  <text x="975" y="702" class="label">Reset part pipeline</text>
+  <text x="768" y="747" class="small">Modes: Every feed · First feed in job · Manual only</text>
+  <text x="768" y="774" class="small">The detected XY refines the corrected nominal pick location.</text>
 </svg>
