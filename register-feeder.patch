@@ -1,0 +1,20 @@
+diff --git a/src/main/java/org/openpnp/machine/reference/ReferenceMachine.java b/src/main/java/org/openpnp/machine/reference/ReferenceMachine.java
+index 5c422f1e..ed768194 100644
+--- a/src/main/java/org/openpnp/machine/reference/ReferenceMachine.java
++++ b/src/main/java/org/openpnp/machine/reference/ReferenceMachine.java
+@@ -66,6 +66,7 @@ import org.openpnp.machine.reference.driver.ReferenceAdvancedMotionPlanner;
+ import org.openpnp.machine.reference.feeder.AdvancedLoosePartFeeder;
+ import org.openpnp.machine.reference.feeder.BlindsFeeder;
+ import org.openpnp.machine.reference.feeder.ReferenceAutoFeeder;
++import org.openpnp.machine.reference.feeder.ReferenceFiducialAutoFeeder;
+ import org.openpnp.machine.reference.feeder.ReferenceDragFeeder;
+ import org.openpnp.machine.reference.feeder.ReferenceHeapFeeder;
+ import org.openpnp.machine.reference.feeder.ReferenceLeverFeeder;
+@@ -441,6 +442,7 @@ public class ReferenceMachine extends AbstractMachine {
+         l.add(ReferencePushPullFeeder.class);
+         l.add(ReferenceTubeFeeder.class);
+         l.add(ReferenceAutoFeeder.class);
++        l.add(ReferenceFiducialAutoFeeder.class);
+         l.add(ReferenceSlotAutoFeeder.class);
+         l.add(ReferenceLoosePartFeeder.class);
+         l.add(AdvancedLoosePartFeeder.class);

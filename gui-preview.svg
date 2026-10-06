@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="770" viewBox="0 0 1280 770">
+  <defs>
+    <style>
+      text { font-family: 'Yu Gothic', 'Meiryo', 'Segoe UI', sans-serif; fill: #263238; }
+      .small { font-size: 14px; } .label { font-size: 16px; } .title { font-size: 19px; font-weight: 700; }
+      .light { fill: #fff; }
+      .field { fill: #fff; stroke: #b4c0c7; stroke-width: 1.3; rx: 5; }
+      .section { fill: #f7f9fa; stroke: #cdd6db; stroke-width: 1.2; rx: 9; }
+    </style>
+  </defs>
+  <rect width="1280" height="770" fill="#e9eef1"/>
+  <rect width="1280" height="48" fill="#34454f"/>
+  <text x="25" y="31" class="light" font-size="17" font-weight="700">OpenPnP 2.7 — Feeders</text>
+  <rect x="0" y="48" width="225" height="722" fill="#f5f7f8" stroke="#d1dade"/>
+  <text x="20" y="83" class="title">フィーダー</text>
+  <rect x="12" y="106" width="201" height="38" rx="5" fill="#dcebf3"/>
+  <text x="24" y="131" class="label">F01  Fiducial Auto Feeder</text>
+  <text x="24" y="174" class="small">F02  ReferenceAutoFeeder</text>
+  <text x="24" y="207" class="small">F03  ReferenceStripFeeder</text>
+  <rect x="244" y="65" width="1018" height="688" rx="9" fill="#fff" stroke="#cbd5da"/>
+  <text x="267" y="98" class="title">F01 — ReferenceFiducialAutoFeeder</text>
+  <text x="267" y="124" class="small" fill="#5d6d75">通常の ReferenceAutoFeeder 設定に、次の補正設定が加わります</text>
+  <rect x="263" y="147" width="600" height="284" class="section"/>
+  <text x="282" y="179" class="title">3点の固定フィデューシャル</text>
+  <text x="286" y="213" class="small">基準マーク</text><text x="512" y="213" class="small">X (mm)</text><text x="681" y="213" class="small">Y (mm)</text>
+  <text x="286" y="251" class="label">fid_A  左手前</text>
+  <rect x="499" y="225" width="146" height="35" class="field"/><text x="511" y="248" class="label">-250.000</text>
+  <rect x="666" y="225" width="146" height="35" class="field"/><text x="678" y="248" class="label">-200.000</text>
+  <text x="286" y="300" class="label">fid_B  右手前</text>
+  <rect x="499" y="274" width="146" height="35" class="field"/><text x="511" y="297" class="label">0.000</text>
+  <rect x="666" y="274" width="146" height="35" class="field"/><text x="678" y="297" class="label">-200.000</text>
+  <text x="286" y="349" class="label">fid_C  右奥・原点</text>
+  <rect x="499" y="323" width="146" height="35" class="field"/><text x="511" y="346" class="label">0.000</text>
+  <rect x="666" y="323" width="146" height="35" class="field"/><text x="678" y="346" class="label">0.000</text>
+  <text x="286" y="397" class="small" fill="#5d6d75">※ 表示値は配置の例。実機で測定した値を入力します。</text>
+  <rect x="883" y="147" width="354" height="284" class="section"/>
+  <text x="905" y="179" class="title">マーク配置</text>
+  <path d="M944 360 L1157 360 L1157 220 Z" fill="#e2f1e8" stroke="#66a982" stroke-width="2"/>
+  <circle cx="944" cy="360" r="10" fill="#2e8b57"/><circle cx="1157" cy="360" r="10" fill="#2e8b57"/><circle cx="1157" cy="220" r="10" fill="#2e8b57"/>
+  <text x="922" y="392" class="small">fid_A</text><text x="1131" y="392" class="small">fid_B</text><text x="1128" y="202" class="small">fid_C</text>
+  <text x="905" y="414" class="small" fill="#5d6d75">測定した3点から XY 補正を算出</text>
+  <rect x="263" y="447" width="600" height="278" class="section"/>
+  <text x="282" y="479" class="title">校正とトリガー</text>
+  <text x="286" y="515" class="label">フィデューシャル Part ID</text><rect x="565" y="491" width="240" height="35" class="field"/><text x="577" y="515" class="label">FIDUCIAL-HOME</text>
+  <text x="286" y="558" class="label">マーク移動の上限</text><rect x="565" y="534" width="112" height="35" class="field"/><text x="577" y="558" class="label">3.0 mm</text>
+  <text x="286" y="602" class="label">□ 定期校正を有効化</text><rect x="565" y="578" width="112" height="35" class="field"/><text x="577" y="602" class="label">5 分</text>
+  <rect x="283" y="647" width="144" height="38" rx="5" fill="#2677a4"/><text x="303" y="672" class="label light">今すぐ校正</text>
+  <text x="449" y="673" class="small" fill="#407457">最終校正 11:42:08</text>
+  <rect x="883" y="447" width="354" height="278" class="section"/>
+  <text x="905" y="479" class="title">上側カメラによる部品認識</text>
+  <text x="905" y="518" class="label">☑ 給材後に部品を検出</text>
+  <text x="905" y="558" class="label">部品位置ずれ上限</text><rect x="1083" y="534" width="123" height="35" class="field"/><text x="1095" y="558" class="label">1.0 mm</text>
+  <rect x="905" y="602" width="170" height="38" rx="5" fill="#fff" stroke="#7f9aad"/><text x="924" y="627" class="label">パイプライン編集</text>
+  <text x="905" y="677" class="small" fill="#5d6d75">検出結果でピック位置の XY を再補正</text>
+</svg>
