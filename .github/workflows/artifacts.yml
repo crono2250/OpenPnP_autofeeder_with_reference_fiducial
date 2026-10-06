@@ -1,0 +1,86 @@
+name: Artifacts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-openpnp:
+    name: Build custom OpenPnP from test
+    runs-on: windows-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Check out this repository
+        uses: actions/checkout@v6
+
+      - name: Check out the documented OpenPnP test baseline
+        uses: actions/checkout@v6
+        with:
+          repository: openpnp/openpnp
+          ref: e6274b38f9d6f25e98677f75edde6c4bc7a9ee71
+          path: openpnp-test
+          persist-credentials: false
+
+      - name: Set up Java 11 and Maven cache
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: maven
+          cache-dependency-path: openpnp-test/pom.xml
+
+      - name: Apply the custom feeder to OpenPnP
+        shell: pwsh
+        run: .\Apply-To-OpenPnP-Test.ps1 -OpenPnPCheckout .\openpnp-test
+
+      - name: Build OpenPnP
+        shell: pwsh
+        working-directory: openpnp-test
+        run: mvn -B -DskipTests package
+
+      - name: Verify and stage the runnable build
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $jar = 'openpnp-test\target\openpnp-gui-0.0.1-alpha-SNAPSHOT.jar'
+          $lib = 'openpnp-test\target\lib'
+          if (-not (Test-Path -LiteralPath $jar -PathType Leaf)) {
+            throw "Missing built OpenPnP JAR: $jar"
+          }
+          if (-not (Test-Path -LiteralPath $lib -PathType Container)) {
+            throw "Missing runtime dependencies: $lib"
+          }
+          $entries = & jar tf $jar
+          if ($LASTEXITCODE -ne 0) { throw 'Could not inspect the built JAR.' }
+          foreach ($class in @(
+            'org/openpnp/machine/reference/feeder/FiducialCatalog.class',
+            'org/openpnp/machine/reference/feeder/ReferenceFiducialAutoFeeder.class',
+            'org/openpnp/machine/reference/feeder/wizards/ReferenceFiducialAutoFeederConfigurationWizard.class'
+          )) {
+            if ($entries -notcontains $class) { throw "Custom feeder class missing: $class" }
+          }
+          New-Item -ItemType Directory -Path dist -Force | Out-Null
+          Copy-Item -LiteralPath $jar -Destination dist
+          Copy-Item -LiteralPath $lib -Destination dist -Recurse
+          Copy-Item -LiteralPath 'docs\installation-guide-en.md' -Destination dist
+          Copy-Item -LiteralPath 'docs\installation-guide-ja.md' -Destination dist
+          $baseline = (& git -C openpnp-test rev-parse HEAD).Trim()
+          $custom = (& git rev-parse HEAD).Trim()
+          @(
+            'Custom OpenPnP build from the test source baseline',
+            "OpenPnP source commit: $baseline",
+            "Custom feeder repository commit: $custom",
+            'Java build target: 11',
+            'Keep the JAR and lib directory together when running.',
+            'This is a source-built OpenPnP distribution, not an overlay for an installed binary.'
+          ) | Set-Content -LiteralPath 'dist\BUILD-INFO.txt' -Encoding utf8
+
+      - name: Upload OpenPnP build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenPnP-test-custom-feeder-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error

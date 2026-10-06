@@ -54,7 +54,9 @@ The script places the overlay JAR before the standard JAR and `lib` on the class
 
 ## 6. Build your own version from the `test` branch
 
-The source baseline is commit `e6274b38f9d6f25e98677f75edde6c4bc7a9ee71` of OpenPnP's `test` branch. For another binary build, obtain its corresponding OpenPnP source, apply the registration patch and added source files, then build with Maven:
+The source baseline is commit `e6274b38f9d6f25e98677f75edde6c4bc7a9ee71` of OpenPnP's `test` branch. To build it in CI, open this repository's **Actions → Artifacts → Run workflow**. This workflow runs only when started manually. It checks out the documented baseline, applies the custom feeder, runs `mvn -B -DskipTests package`, verifies the feeder classes, and uploads a downloadable artifact containing the built JAR, its `lib` directory, these guides, and `BUILD-INFO.txt`. Download the artifact from the completed workflow run's **Artifacts** section. Keep the JAR and `lib` directory together. This artifact is a source-built OpenPnP distribution, not the overlay JAR for the installed binary.
+
+The equivalent local build is:
 
 ```powershell
 git clone --branch test https://github.com/openpnp/openpnp.git openpnp-test
@@ -64,7 +66,7 @@ Set-Location .\openpnp-test
 mvn -DskipTests package
 ```
 
-Launch the resulting `target\openpnp-gui-0.0.1-alpha-SNAPSHOT.jar` together with `target\lib` from a separate test directory. Do not overwrite a binary installation with a JAR from a different build. OpenPnP has no general plugin registration mechanism for this feeder, so the source patch adds one entry to `ReferenceMachine`'s feeder class list.
+Launch the resulting `target\openpnp-gui-0.0.1-alpha-SNAPSHOT.jar` together with `target\lib` from a separate test directory. Do not overwrite a binary installation with a JAR from a different build. OpenPnP has no general plugin registration mechanism for this feeder, so the source patch adds one entry to `ReferenceMachine`'s feeder class list. For a different OpenPnP source revision, verify that the patch still applies and build a matching version; the CI workflow intentionally uses the documented baseline.
 
 ## Scope of correction and failure behavior
 

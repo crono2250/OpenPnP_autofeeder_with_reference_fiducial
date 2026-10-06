@@ -17,6 +17,7 @@ The preview illustrates the custom feeder panel. Choose an installation surface,
 | `openpnp-fiducial-auto-feeder-50dcdce.jar` | Overlay classes for OpenPnP 2.7 build `50dcdce` |
 | `Start-CustomOpenPnP.ps1` | Starts that binary with the overlay JAR first on the classpath |
 | `Apply-To-OpenPnP-Test.ps1` | Applies the source changes to an OpenPnP `test` checkout |
+| `.github/workflows/artifacts.yml` | Manually builds the documented `test` baseline and uploads a runnable artifact |
 | `README-ja.md` | Japanese README |
 | `docs/installation-guide-en.md` / `docs/installation-guide-ja.md` | Detailed installation, setup, and trial-run instructions in English and Japanese |
 | `gui-preview.svg` / `gui-preview.png` | Editable UI concept and rendered image |
@@ -56,6 +57,8 @@ powershell.exe -ExecutionPolicy Bypass -File .\Start-CustomOpenPnP.ps1 -InstallD
 ```
 
 Follow the installation guide in [English](docs/installation-guide-en.md) or [Japanese](docs/installation-guide-ja.md) for machine backup, fiducial Part setup, feeder configuration, the three recognition modes, and cautious trial runs. For a different OpenPnP binary, apply the source patch to the corresponding source revision and build a matching version.
+
+For a source-built OpenPnP distribution, manually run **Actions → Artifacts → Run workflow** on GitHub. The workflow builds the documented `test` baseline with the custom feeder and uploads the JAR and `lib` directory as a downloadable artifact. It does not run on pushes.
 
 ## Verification and limits
 

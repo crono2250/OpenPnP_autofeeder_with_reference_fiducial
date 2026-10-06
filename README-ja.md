@@ -17,6 +17,7 @@
 | `openpnp-fiducial-auto-feeder-50dcdce.jar` | OpenPnP 2.7 の `50dcdce` ビルド用の追加クラス |
 | `Start-CustomOpenPnP.ps1` | 追加 JAR をクラスパスの先頭に置いて対象バイナリを起動するスクリプト |
 | `Apply-To-OpenPnP-Test.ps1` | OpenPnP `test` のソースへ変更を適用するスクリプト |
+| `.github/workflows/artifacts.yml` | 手動で `test` の基準版をビルドし、実行用の成果物をアップロードするワークフロー |
 | `README.md` | 英語版 README |
 | `docs/installation-guide-en.md` / `docs/installation-guide-ja.md` | 英語・日本語の導入、設定、試運転手順 |
 | `gui-preview.svg` / `gui-preview.png` | 編集可能な GUI イメージとその画像 |
@@ -56,6 +57,8 @@ powershell.exe -ExecutionPolicy Bypass -File .\Start-CustomOpenPnP.ps1 -InstallD
 ```
 
 マシン設定のバックアップ、フィデューシャル Part、フィーダー設定、3種類の認識モード、試運転については[日本語の導入手順](docs/installation-guide-ja.md)または[英語の導入手順](docs/installation-guide-en.md)を参照してください。別のバイナリ版には、対応するソースへ変更を適用し、その版に合う JAR をビルドしてください。
+
+ソースからビルドした OpenPnP 一式が必要な場合は、GitHub の **Actions → Artifacts → Run workflow** を手動で実行してください。手順書に記載した `test` の基準コミットにカスタムフィーダーを適用し、JAR と `lib` をダウンロード可能な成果物にします。push 時には自動実行されません。
 
 ## 検証と制限
 

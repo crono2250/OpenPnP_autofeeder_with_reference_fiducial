@@ -54,7 +54,9 @@ powershell.exe -ExecutionPolicy Bypass -File .\Start-CustomOpenPnP.ps1 -InstallD
 
 ## 6. `test` ブランチから自分の版をビルドする場合
 
-`test` の取得時コミットは `e6274b38f9d6f25e98677f75edde6c4bc7a9ee71` です。別のバイナリ版には、その版に対応する OpenPnP ソースを取得して登録用のパッチと追加ソースを適用し、Maven でビルドします。
+`test` の取得時コミットは `e6274b38f9d6f25e98677f75edde6c4bc7a9ee71` です。CI でビルドする場合は、本リポジトリの **Actions → Artifacts → Run workflow** を選びます。このワークフローは手動で起動した場合だけ実行されます。記載した基準コミットを取得し、フィーダーを適用して `mvn -B -DskipTests package` を実行し、追加クラスを検証します。完了した実行の **Artifacts** から、ビルド済み JAR、`lib` ディレクトリ、英語・日本語の手順書、`BUILD-INFO.txt` を含む成果物をダウンロードしてください。JAR と `lib` は同じ階層に置いて使用します。この成果物はソースからビルドした OpenPnP 一式であり、インストール済みバイナリ用の追加 JAR ではありません。
+
+ローカルで同じビルドを行う場合は、次を実行します。
 
 ```powershell
 git clone --branch test https://github.com/openpnp/openpnp.git openpnp-test
@@ -64,7 +66,7 @@ Set-Location .\openpnp-test
 mvn -DskipTests package
 ```
 
-生成された `target\openpnp-gui-0.0.1-alpha-SNAPSHOT.jar` と `target\lib` を、専用のテスト用ディレクトリから一緒に起動してください。既存のバイナリインストールへ異なる版の JAR を単独で上書きしないでください。OpenPnP 本体には汎用プラグイン登録がないため、ソース適用時は `ReferenceMachine` のフィーダー一覧への1行追加が必要です。
+生成された `target\openpnp-gui-0.0.1-alpha-SNAPSHOT.jar` と `target\lib` を、専用のテスト用ディレクトリから一緒に起動してください。既存のバイナリインストールへ異なる版の JAR を単独で上書きしないでください。OpenPnP 本体には汎用プラグイン登録がないため、ソース適用時は `ReferenceMachine` のフィーダー一覧への1行追加が必要です。別の OpenPnP ソース版を使う場合は、パッチが適用できることを確認して対応版をビルドしてください。CI は手順書の基準コミットに固定しています。
 
 ## 補正の範囲と失敗時の挙動
 
