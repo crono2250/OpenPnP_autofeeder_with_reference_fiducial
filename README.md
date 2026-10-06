@@ -1,5 +1,7 @@
 # Three-fiducial auto feeder for OpenPnP
 
+**Language:** English | [日本語](README-ja.md)
+
 `ReferenceFiducialAutoFeeder` extends OpenPnP's `ReferenceAutoFeeder`. A machine-wide catalog stores reusable fiducial coordinates. Each installation surface assigns three saved marks to `fid_A`, `fid_B`, and `fid_C`; every feeder assigned to that surface uses the same three references. An affine transform derived from top-camera measurements corrects each feeder's nominal XY pick position. Optional part recognition uses the same camera to refine the XY position of a presented part.
 
 ![Configuration UI preview](gui-preview.png)
@@ -15,7 +17,8 @@ The preview illustrates the custom feeder panel. Choose an installation surface,
 | `openpnp-fiducial-auto-feeder-50dcdce.jar` | Overlay classes for OpenPnP 2.7 build `50dcdce` |
 | `Start-CustomOpenPnP.ps1` | Starts that binary with the overlay JAR first on the classpath |
 | `Apply-To-OpenPnP-Test.ps1` | Applies the source changes to an OpenPnP `test` checkout |
-| `docs/installation-guide-ja.md` | Detailed installation, setup, and trial-run instructions in Japanese |
+| `README-ja.md` | Japanese README |
+| `docs/installation-guide-en.md` / `docs/installation-guide-ja.md` | Detailed installation, setup, and trial-run instructions in English and Japanese |
 | `gui-preview.svg` / `gui-preview.png` | Editable UI concept and rendered image |
 
 ## Part recognition modes
@@ -52,7 +55,7 @@ To use the matching installed binary without modifying its program files:
 powershell.exe -ExecutionPolicy Bypass -File .\Start-CustomOpenPnP.ps1 -InstallDir 'C:\Program Files\OpenPnP'
 ```
 
-Follow [the installation guide](docs/installation-guide-ja.md) for machine backup, fiducial Part setup, feeder configuration, the three recognition modes, and cautious trial runs. For a different OpenPnP binary, apply the source patch to the corresponding source revision and build a matching version.
+Follow the installation guide in [English](docs/installation-guide-en.md) or [Japanese](docs/installation-guide-ja.md) for machine backup, fiducial Part setup, feeder configuration, the three recognition modes, and cautious trial runs. For a different OpenPnP binary, apply the source patch to the corresponding source revision and build a matching version.
 
 ## Verification and limits
 

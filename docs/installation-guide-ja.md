@@ -1,5 +1,7 @@
 # バイナリ版 OpenPnP 2 への導入手順
 
+**言語:** [English](installation-guide-en.md) | 日本語
+
 ## 1. 対象版とバックアップを確認
 
 同梱の追加 JAR は OpenPnP 2.7 の `50dcdce` 向けです。`C:\Program Files\OpenPnP\openpnp-gui-0.0.1-alpha-SNAPSHOT.jar` の `META-INF/MANIFEST.MF` にある `Implementation-Version` が `2026-07-03_22-12-05.50dcdce` の場合に使用できます。起動スクリプトが版を検証します。
@@ -56,6 +58,7 @@ powershell.exe -ExecutionPolicy Bypass -File .\Start-CustomOpenPnP.ps1 -InstallD
 
 ```powershell
 git clone --branch test https://github.com/openpnp/openpnp.git openpnp-test
+git -C .\openpnp-test checkout e6274b38f9d6f25e98677f75edde6c4bc7a9ee71
 .\Apply-To-OpenPnP-Test.ps1 -OpenPnPCheckout .\openpnp-test
 Set-Location .\openpnp-test
 mvn -DskipTests package
