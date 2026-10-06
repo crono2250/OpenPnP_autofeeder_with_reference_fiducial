@@ -329,11 +329,23 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     }
 
     public Location getFidALocation() { return fidALocation; }
-    public void setFidALocation(Location value) { fidALocation = value; invalidateCalibration(); firePropertyChange("fidALocation", null, value); }
+    public void setFidALocation(Location value) {
+        fidALocation = value;
+        invalidateCalibration();
+        firePropertyChange("fidALocation", null, value);
+    }
     public Location getFidBLocation() { return fidBLocation; }
-    public void setFidBLocation(Location value) { fidBLocation = value; invalidateCalibration(); firePropertyChange("fidBLocation", null, value); }
+    public void setFidBLocation(Location value) {
+        fidBLocation = value;
+        invalidateCalibration();
+        firePropertyChange("fidBLocation", null, value);
+    }
     public Location getFidCLocation() { return fidCLocation; }
-    public void setFidCLocation(Location value) { fidCLocation = value; invalidateCalibration(); firePropertyChange("fidCLocation", null, value); }
+    public void setFidCLocation(Location value) {
+        fidCLocation = value;
+        invalidateCalibration();
+        firePropertyChange("fidCLocation", null, value);
+    }
     /** The machine coordinate origin is X=0, Y=0; a custom selected mark is preserved. */
     public Location getEffectiveFidCLocation() {
         if (fiducialSurfaceId != null) {
@@ -365,8 +377,12 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     public synchronized FiducialCatalog.Surface getOrCreateSurface() {
         FiducialCatalog catalog = FiducialCatalog.get();
         FiducialCatalog.Surface surface = catalog.getSurface(fiducialSurfaceId);
-        if (surface != null) return surface;
-        if (fiducialSurfaceId != null) return null;
+        if (surface != null) {
+            return surface;
+        }
+        if (fiducialSurfaceId != null) {
+            return null;
+        }
         boolean legacyCoordinates = fidCUseMachineOrigin || hasXY(fidALocation)
                 || hasXY(fidBLocation) || hasXY(fidCLocation);
         if (!legacyCoordinates && !catalog.getSurfaces().isEmpty()) {
@@ -381,19 +397,26 @@ public class ReferenceFiducialAutoFeeder extends ReferenceAutoFeeder {
     }
 
     private static boolean hasXY(Location location) {
-        if (location == null) return false;
+        if (location == null) {
+            return false;
+        }
         Location mm = location.convertToUnits(LengthUnit.Millimeters);
         return mm.getX() != 0 || mm.getY() != 0;
     }
 
     private static Location getAssignedLocation(FiducialCatalog catalog,
             FiducialCatalog.Surface surface, int index) {
-        if (surface == null) return null;
+        if (surface == null) {
+            return null;
+        }
         FiducialCatalog.Mark mark = catalog.getMark(surface.getMarkId(index));
         return mark == null ? null : mark.getLocation();
     }
     public String getFiducialPartId() { return fiducialPartId; }
-    public void setFiducialPartId(String value) { fiducialPartId = value; invalidateCalibration(); }
+    public void setFiducialPartId(String value) {
+        fiducialPartId = value;
+        invalidateCalibration();
+    }
     public Part getFiducialPart() {
         return fiducialPartId == null || fiducialPartId.isEmpty()
                 ? null : Configuration.get().getPart(fiducialPartId);

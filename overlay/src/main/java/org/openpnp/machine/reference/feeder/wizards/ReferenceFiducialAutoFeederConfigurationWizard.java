@@ -100,7 +100,9 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
         deleteSurface.addActionListener(e -> UiUtils.messageBoxOnException(this::deleteSurface));
         addMarkCell(surfaces, deleteSurface, 4, 0);
         surfaceBox.addActionListener(e -> {
-            if (refreshing) return;
+            if (refreshing) {
+                return;
+            }
             Surface selected = (Surface) surfaceBox.getSelectedItem();
             feeder.setFiducialSurfaceId(selected == null ? null : selected.getId());
             refreshCatalogUI();
@@ -154,19 +156,26 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
             manage.add(deleteMark[i]);
             addMarkCell(marks, manage, 5, i + 1);
             fidSelection[i].addActionListener(e -> {
-                if (refreshing) return;
+                if (refreshing) {
+                    return;
+                }
                 Surface surface = selectedSurface();
                 Mark selected = (Mark) fidSelection[index].getSelectedItem();
-                if (surface != null) catalog.setMark(surface, index,
-                        selected == null ? null : selected.getId());
+                if (surface != null) {
+                    catalog.setMark(surface, index, selected == null ? null : selected.getId());
+                }
                 refreshRow(index);
             });
         }
         addMarkCell(marks, useMachineOrigin, 6, 3);
         useMachineOrigin.addItemListener(e -> {
-            if (refreshing) return;
+            if (refreshing) {
+                return;
+            }
             Surface surface = selectedSurface();
-            if (surface != null) catalog.setCUseMachineOrigin(surface, useMachineOrigin.isSelected());
+            if (surface != null) {
+                catalog.setCUseMachineOrigin(surface, useMachineOrigin.isSelected());
+            }
             updateFidCControls();
         });
 
@@ -252,7 +261,9 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
             for (int i = 0; i < 3; i++) {
                 DefaultComboBoxModel<Mark> model = new DefaultComboBoxModel<>();
                 model.addElement(null);
-                for (Mark mark : catalog.getMarks()) model.addElement(mark);
+                for (Mark mark : catalog.getMarks()) {
+                    model.addElement(mark);
+                }
                 fidSelection[i].setModel(model);
                 fidSelection[i].setSelectedItem(surface == null ? null
                         : catalog.getMark(surface.getMarkId(i)));
@@ -282,7 +293,9 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
     private void createSurface() {
         String name = JOptionPane.showInputDialog(this, "Installation surface name:",
                 "New installation surface", JOptionPane.QUESTION_MESSAGE);
-        if (name == null) return;
+        if (name == null) {
+            return;
+        }
         Surface surface = catalog.addSurface(name);
         feeder.setFiducialSurfaceId(surface.getId());
         refreshCatalogUI();
@@ -290,15 +303,21 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
 
     private void renameSurface() {
         Surface surface = selectedSurface();
-        if (surface == null) return;
+        if (surface == null) {
+            return;
+        }
         String name = JOptionPane.showInputDialog(this, "Installation surface name:",
                 surface.getName());
-        if (name != null) catalog.renameSurface(surface.getId(), name);
+        if (name != null) {
+            catalog.renameSurface(surface.getId(), name);
+        }
     }
 
     private void deleteSurface() {
         Surface surface = selectedSurface();
-        if (surface == null) return;
+        if (surface == null) {
+            return;
+        }
         int choice = JOptionPane.showConfirmDialog(this,
                 "Delete " + surface.getName() + "? Feeders using it must select another surface.",
                 "Delete installation surface", JOptionPane.YES_NO_OPTION);
@@ -323,7 +342,9 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
 
     private void saveNewMark(int index) {
         Surface surface = selectedSurface();
-        if (surface == null) throw new IllegalArgumentException("Select an installation surface first.");
+        if (surface == null) {
+            throw new IllegalArgumentException("Select an installation surface first.");
+        }
         Mark mark = catalog.addMark(capturedXY(index));
         catalog.setMark(surface, index, mark.getId());
         refreshCatalogUI();
@@ -331,14 +352,18 @@ public class ReferenceFiducialAutoFeederConfigurationWizard
 
     private void updateMark(int index) {
         Mark mark = (Mark) fidSelection[index].getSelectedItem();
-        if (mark == null) throw new IllegalArgumentException("Select a saved fiducial first.");
+        if (mark == null) {
+            throw new IllegalArgumentException("Select a saved fiducial first.");
+        }
         catalog.updateMark(mark.getId(), capturedXY(index));
         refreshCatalogUI();
     }
 
     private void deleteMark(int index) {
         Mark mark = (Mark) fidSelection[index].getSelectedItem();
-        if (mark == null) return;
+        if (mark == null) {
+            return;
+        }
         int choice = JOptionPane.showConfirmDialog(this,
                 "Delete " + mark.getName() + " from the shared catalog and all surfaces?",
                 "Delete fiducial", JOptionPane.YES_NO_OPTION);

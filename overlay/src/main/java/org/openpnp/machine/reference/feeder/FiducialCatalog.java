@@ -67,19 +67,33 @@ public class FiducialCatalog {
     public synchronized List<Surface> getSurfaces() { return new ArrayList<>(surfaces); }
 
     public synchronized Mark getMark(String id) {
-        if (id == null) return null;
-        for (Mark mark : marks) if (id.equals(mark.id)) return mark;
+        if (id == null) {
+            return null;
+        }
+        for (Mark mark : marks) {
+            if (id.equals(mark.id)) {
+                return mark;
+            }
+        }
         return null;
     }
 
     public synchronized Surface getSurface(String id) {
-        if (id == null) return null;
-        for (Surface surface : surfaces) if (id.equals(surface.id)) return surface;
+        if (id == null) {
+            return null;
+        }
+        for (Surface surface : surfaces) {
+            if (id.equals(surface.id)) {
+                return surface;
+            }
+        }
         return null;
     }
 
     private static Location xy(Location location) {
-        if (location == null) throw new IllegalArgumentException("Capture a camera position first.");
+        if (location == null) {
+            throw new IllegalArgumentException("Capture a camera position first.");
+        }
         Location mm = location.convertToUnits(LengthUnit.Millimeters);
         if (!Double.isFinite(mm.getX()) || !Double.isFinite(mm.getY())) {
             throw new IllegalArgumentException("Fiducial X and Y must be finite.");
@@ -111,7 +125,9 @@ public class FiducialCatalog {
 
     public synchronized void updateMark(String id, Location position) {
         Mark mark = getMark(id);
-        if (mark == null) throw new IllegalArgumentException("Select a saved fiducial first.");
+        if (mark == null) {
+            throw new IllegalArgumentException("Select a saved fiducial first.");
+        }
         Location location = xy(position);
         String name = name(location);
         ensureUniqueName(name, id);
@@ -122,19 +138,29 @@ public class FiducialCatalog {
 
     public synchronized void removeMark(String id) {
         Mark mark = getMark(id);
-        if (mark == null) return;
+        if (mark == null) {
+            return;
+        }
         marks.remove(mark);
         for (Surface surface : surfaces) {
-            if (id.equals(surface.aId)) surface.aId = null;
-            if (id.equals(surface.bId)) surface.bId = null;
-            if (id.equals(surface.cId)) surface.cId = null;
+            if (id.equals(surface.aId)) {
+                surface.aId = null;
+            }
+            if (id.equals(surface.bId)) {
+                surface.bId = null;
+            }
+            if (id.equals(surface.cId)) {
+                surface.cId = null;
+            }
         }
         changed();
     }
 
     public synchronized Surface addSurface(String requestedName) {
         String name = requestedName == null ? "" : requestedName.trim();
-        if (name.isEmpty()) throw new IllegalArgumentException("Enter an installation surface name.");
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Enter an installation surface name.");
+        }
         for (Surface surface : surfaces) {
             if (surface.name.equalsIgnoreCase(name)) {
                 throw new IllegalArgumentException("An installation surface with that name already exists.");
@@ -148,9 +174,13 @@ public class FiducialCatalog {
 
     public synchronized void renameSurface(String id, String requestedName) {
         Surface surface = getSurface(id);
-        if (surface == null) throw new IllegalArgumentException("Select an installation surface first.");
+        if (surface == null) {
+            throw new IllegalArgumentException("Select an installation surface first.");
+        }
         String name = requestedName == null ? "" : requestedName.trim();
-        if (name.isEmpty()) throw new IllegalArgumentException("Enter an installation surface name.");
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Enter an installation surface name.");
+        }
         for (Surface other : surfaces) {
             if (other != surface && other.name.equalsIgnoreCase(name)) {
                 throw new IllegalArgumentException("An installation surface with that name already exists.");
@@ -162,7 +192,9 @@ public class FiducialCatalog {
 
     public synchronized void removeSurface(String id) {
         Surface surface = getSurface(id);
-        if (surface == null) return;
+        if (surface == null) {
+            return;
+        }
         surfaces.remove(surface);
         // Keep feeder IDs pointing at the missing surface until the operator selects a replacement.
         // A silent fallback could send the camera to a different installation face.
@@ -170,17 +202,31 @@ public class FiducialCatalog {
     }
 
     public synchronized void setMark(Surface surface, int index, String markId) {
-        if (getSurface(surface.id) == null) throw new IllegalArgumentException("Installation surface was deleted.");
-        if (markId != null && getMark(markId) == null) throw new IllegalArgumentException("Fiducial was deleted.");
-        if (index == 0) surface.aId = markId;
-        else if (index == 1) surface.bId = markId;
-        else if (index == 2) surface.cId = markId;
-        else throw new IllegalArgumentException("Invalid fiducial slot.");
+        if (getSurface(surface.id) == null) {
+            throw new IllegalArgumentException("Installation surface was deleted.");
+        }
+        if (markId != null && getMark(markId) == null) {
+            throw new IllegalArgumentException("Fiducial was deleted.");
+        }
+        if (index == 0) {
+            surface.aId = markId;
+        }
+        else if (index == 1) {
+            surface.bId = markId;
+        }
+        else if (index == 2) {
+            surface.cId = markId;
+        }
+        else {
+            throw new IllegalArgumentException("Invalid fiducial slot.");
+        }
         changed();
     }
 
     public synchronized void setCUseMachineOrigin(Surface surface, boolean value) {
-        if (getSurface(surface.id) == null) throw new IllegalArgumentException("Installation surface was deleted.");
+        if (getSurface(surface.id) == null) {
+            throw new IllegalArgumentException("Installation surface was deleted.");
+        }
         surface.cUseMachineOrigin = value;
         changed();
     }
@@ -203,7 +249,9 @@ public class FiducialCatalog {
             String candidate = "Surface " + number++;
             used = false;
             for (Surface existing : surfaces) {
-                if (existing.name.equalsIgnoreCase(candidate)) used = true;
+                if (existing.name.equalsIgnoreCase(candidate)) {
+                    used = true;
+                }
             }
         } while (used);
         Surface surface = addSurface("Surface " + (number - 1));
@@ -216,16 +264,24 @@ public class FiducialCatalog {
     }
 
     private static boolean isZero(Location location) {
-        if (location == null) return true;
+        if (location == null) {
+            return true;
+        }
         Location mm = location.convertToUnits(LengthUnit.Millimeters);
         return mm.getX() == 0 && mm.getY() == 0;
     }
 
     private String findOrAdd(Location position) {
-        if (position == null) return null;
+        if (position == null) {
+            return null;
+        }
         Location location = xy(position);
         String target = name(location);
-        for (Mark mark : marks) if (mark.name.equals(target)) return mark.id;
+        for (Mark mark : marks) {
+            if (mark.name.equals(target)) {
+                return mark.id;
+            }
+        }
         return addMark(location).id;
     }
 
@@ -237,7 +293,9 @@ public class FiducialCatalog {
 
         public Mark() { }
         private Mark(String id, String name, Location location) {
-            this.id = id; this.name = name; this.location = location;
+            this.id = id;
+            this.name = name;
+            this.location = location;
         }
         public String getId() { return id; }
         public String getName() { return name; }
@@ -255,7 +313,10 @@ public class FiducialCatalog {
         @Attribute(required = false) private boolean cUseMachineOrigin;
 
         public Surface() { }
-        private Surface(String id, String name) { this.id = id; this.name = name; }
+        private Surface(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
         public String getId() { return id; }
         public String getName() { return name; }
         public String getMarkId(int index) {

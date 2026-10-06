@@ -1,1 +1,2 @@
 register-feeder.patch text eol=lf
+overlay/**/*.java text eol=lf
